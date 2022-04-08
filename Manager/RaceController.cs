@@ -6,115 +6,88 @@ using static GameStateManager;
 
 public class RaceController : MonoBehaviour
 {
-    public enum RacePhase {NONE,TimeTrialGameStart,TimeTrialCameraFlyOver,TimeTrialCountdownRace,TimeTrialRace,TimeTrialGameEnd}
-
-    public int lapNumber;
-    private PrefabGarage prefabGarage;
-    private GameObject spawnPoint;
-    public GameObject playerPrefab;
-
-    public int totalNumberOfLaps;
-    public List<Checkpoint> requiredCheckpoints;
-    public float totalLapTimer;
-    public float currentLapTimer;
-    public GameStateManager gameStateManager;
-
-    public CameraManager cameraManager;
-
-    public RacePhase racePhase;
-
-    public float raceStartCountdownTimer = 6;
-    public KartController kartController;
-    public CharacterController characterController;
-
-    public FinishLine finishLine;
-
-    public List<float> lapTimes;
-
-    public UIHintsWindow hintsWindow;
+    public enum RacePhase {NONE,TimeTrialGameStart,TimeTrialCameraFlyOver,TimeTrialCountdownRace,TimeTrialRace,TimeTrialGameEnd} // the types of race phases
+    public int lapNumber; // the lap number
+    private PrefabGarage prefabGarage; // the prefab garage
+    private GameObject spawnPoint; // the spawn point
+    public GameObject playerPrefab; // the player prefab
+    public int totalNumberOfLaps; // the toal number of laps
+    public List<Checkpoint> requiredCheckpoints; // the list of required checkpoints
+    public float totalLapTimer; // the toal lap timer
+    public float currentLapTimer; // the current lap timer
+    public GameStateManager gameStateManager; // the game state manager
+    public CameraManager cameraManager; // the camera manager
+    public RacePhase racePhase; // the race phase
+    public float raceStartCountdownTimer = 6; // the race start countdown timer
+    public KartController kartController; // the kart controller
+    public CharacterController characterController; // the characer controller
+    public FinishLine finishLine; // the finish line
+    public List<float> lapTimes; // the list of lap times
+    public UIHintsWindow hintsWindow; // the hints window
 
     private void Start()
     {
-        prefabGarage = FindObjectOfType<PrefabGarage>();
-        spawnPoint = GameObject.FindGameObjectWithTag("Spawn Point");
-        gameStateManager = GameObject.FindObjectOfType<GameStateManager>();
-
-        GameObject player = GameObject.Instantiate(playerPrefab,spawnPoint.transform.position, Quaternion.identity);
-        GameObject character = GameObject.Instantiate(prefabGarage.characterPrefabs[PlayerPrefs.GetInt("ChosenCharacterIndex")], spawnPoint.transform.position, Quaternion.identity);
-        GameObject kart = GameObject.Instantiate(prefabGarage.kartBodyPrefabs[PlayerPrefs.GetInt("ChosenKartBodyIndex")], spawnPoint.transform.position, Quaternion.identity);
-        GameObject connectionPoint = GameObject.FindGameObjectWithTag("PlayerCharacterKartConnectionPoint");
-
-        character.transform.parent = connectionPoint.transform;
-        kart.transform.parent = connectionPoint.transform;
-
-        kartController = player.GetComponentInChildren<KartController>();
-        characterController = player.GetComponentInChildren<CharacterController>();
-
-        kartController.AttachToCharacterAndKart();
-
-        kartController.transform.eulerAngles = spawnPoint.transform.eulerAngles;
-
-        cameraManager.mainCVCam.LookAt = kartController.transform;
-        cameraManager.mainCVCam.Follow = kartController.transform;
-
-        cameraManager.endGameCVCam.LookAt = kartController.transform;
-        cameraManager.endGameCVCam.Follow = kartController.transform;
-        
-        finishLine = GetComponentInChildren<FinishLine>();
-
-        hintsWindow = FindObjectOfType<UIHintsWindow>();
+        prefabGarage = FindObjectOfType<PrefabGarage>(); // store a local reference to the prefab garage
+        spawnPoint = GameObject.FindGameObjectWithTag("Spawn Point"); // store a local reference to the spawn point
+        gameStateManager = GameObject.FindObjectOfType<GameStateManager>(); // store a local reference to the game state manager
+        GameObject player = GameObject.Instantiate(playerPrefab,spawnPoint.transform.position, Quaternion.identity); // instantiate the player prefab
+        GameObject character = GameObject.Instantiate(prefabGarage.characterPrefabs[PlayerPrefs.GetInt("ChosenCharacterIndex")], spawnPoint.transform.position, Quaternion.identity); // instantiate the character prefab
+        GameObject kart = GameObject.Instantiate(prefabGarage.kartBodyPrefabs[PlayerPrefs.GetInt("ChosenKartBodyIndex")], spawnPoint.transform.position, Quaternion.identity); // instantiate the kart body prefab
+        GameObject connectionPoint = GameObject.FindGameObjectWithTag("PlayerCharacterKartConnectionPoint"); // store a local reference to the connection point that will connect the character and the kart
+        character.transform.parent = connectionPoint.transform; // connect  the character to the connection point
+        kart.transform.parent = connectionPoint.transform; // connect the kart to the connection point
+        kartController = player.GetComponentInChildren<KartController>(); // store a local reference to the kart controller
+        characterController = player.GetComponentInChildren<CharacterController>(); // store a local reference to the character controller
+        kartController.AttachToCharacterAndKart(); // attach the kart and character together
+        kartController.transform.eulerAngles = spawnPoint.transform.eulerAngles; // match the rotation of the kart controller to the spawn point
+        cameraManager.mainCVCam.LookAt = kartController.transform; // set the cinemachine main virtual camera lookat to the kart controller
+        cameraManager.mainCVCam.Follow = kartController.transform; // set the cinemachine main virtual camera follow to the kart controller
+        cameraManager.endGameCVCam.LookAt = kartController.transform; // set the cinemachine end game virtual camera lookat to the kart controller
+        cameraManager.endGameCVCam.Follow = kartController.transform; // set the cinemachine end game virtual camera folow to the kart c ontroller
+        finishLine = GetComponentInChildren<FinishLine>(); // store a local reference to the finsih line
+        hintsWindow = FindObjectOfType<UIHintsWindow>(); // store a local reference to the hints window
     }
-
 
     private void Update()
     {
-        if (racePhase == RacePhase.NONE && gameStateManager.currentGameMode == GameMode.TimeTrial)
+        if (racePhase == RacePhase.NONE && gameStateManager.currentGameMode == GameMode.TimeTrial) // if the race phase is none and the game mode is time trial
         {
-            racePhase = RacePhase.TimeTrialGameStart;
+            racePhase = RacePhase.TimeTrialGameStart; // set the race phase to time trial game start
         }
-
-        if (racePhase == RacePhase.TimeTrialGameStart)
+        if (racePhase == RacePhase.TimeTrialGameStart) // if the race phase is time trial game start
         {
-            racePhase = RacePhase.TimeTrialCameraFlyOver;
+            racePhase = RacePhase.TimeTrialCameraFlyOver; // set the race phase to time trial camera fly over
         }
-
-        if (racePhase == RacePhase.TimeTrialCameraFlyOver)
+        if (racePhase == RacePhase.TimeTrialCameraFlyOver) // if the race phase is time trial camera fly over
         {
-            cameraManager.DoFlyOverSequence();
+            cameraManager.DoFlyOverSequence(); // start the camera flyover sequence
         }
-
-        if (racePhase == RacePhase.TimeTrialCountdownRace)
+        if (racePhase == RacePhase.TimeTrialCountdownRace) // if the race phase is time trial countdown race
         {
-            raceStartCountdownTimer -= Time.deltaTime;
-            if (raceStartCountdownTimer < 0)
+            raceStartCountdownTimer -= Time.deltaTime; // subtract from the race start countdown timer
+            if (raceStartCountdownTimer < 0) // if the race countdown timer has gone below zero
             {
-                raceStartCountdownTimer = 0;
+                raceStartCountdownTimer = 0; // set the race countdown timer to zero
             }
         }
-
-        if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer < 3 && !kartController.engineIsRunning)
+        if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer < 3 && !kartController.engineIsRunning) // if the race phase is time trial countdown race and the race countdown timer is less than 3 and the kart controller engine is not running
         {
-            characterController.StartEngine();
-            kartController.engineIsRunning = true;
+            characterController.StartEngine(); // start the engine
+            kartController.engineIsRunning = true; // flag the engine is running as true
         }
-
-        if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer == 0)
+        if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer == 0) // if the race phase is time trial countdown race and the race start countdown timer is equal to zero
         {
-            if (gameStateManager.currentGameMode == GameMode.TimeTrial)
+            if (gameStateManager.currentGameMode == GameMode.TimeTrial) // if the current game mode is time trial
             {
-                racePhase = RacePhase.TimeTrialRace;
+                racePhase = RacePhase.TimeTrialRace; // set the race phase to time trial race
             }
-            kartController.controllable = true;
-            characterController.SayAreYouReady();
+            kartController.controllable = true; // flag the kart as controllable
+            characterController.SayAreYouReady(); // play the character's are you ready sound
         }
-
-
-
-
-        if (racePhase == RacePhase.TimeTrialRace)
+        if (racePhase == RacePhase.TimeTrialRace) // if the race phase is time trial race
         {
-            currentLapTimer += Time.deltaTime;
-            totalLapTimer += Time.deltaTime;
+            currentLapTimer += Time.deltaTime; // increment the current lap timer
+            totalLapTimer += Time.deltaTime; // increment the total lap timer
         }
     }
 }

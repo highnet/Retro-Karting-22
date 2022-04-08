@@ -55,12 +55,12 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public void StartEngine()
+    public void StartEngine() // starts the engine
     {
         kartController.kartClipPlayer.PlayOneShot(0, 23, 1.0f, true); // play the start engine sound
     }
 
-    public void SayAreYouReady()
+    public void SayAreYouReady() // says are you ready
     {
         kartController.characterClipPlayer.PlayOneShot(0, 0, 1.0f, true); // play the are you ready sound
     }

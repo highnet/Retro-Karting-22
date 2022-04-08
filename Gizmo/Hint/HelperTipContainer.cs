@@ -50,7 +50,7 @@ public class HelperTipContainer : MonoBehaviour
         }
     }
 
-    public string GetRandomHelperTip()
+    public string GetRandomHelperTip() // gets a random helper tip
     {
         return floatingHelperTipstexts[UnityEngine.Random.Range(0, floatingHelperTipstexts.Length)]; // get a random helper tip out of all possible helper tips
     }

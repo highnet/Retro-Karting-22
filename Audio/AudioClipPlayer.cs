@@ -48,9 +48,8 @@ public class AudioClipPlayer : MonoBehaviour
         }
     }
 
-    private void PlayNextJukeboxSong()
+    private void PlayNextJukeboxSong() // plays the next song in the jukebox
     {
-
         jukeboxIndex++; // increase the jukebox index
         if (jukeboxIndex > audioClips.Count-1) // if we ran out of songs to play, cycle back to the first song
         {
@@ -73,7 +72,7 @@ public class AudioClipPlayer : MonoBehaviour
         }        
     }
 
-    public void PlayOneShot(int audioSourceIndex, int audioClipsIndex, float volumeScale, bool playIfActive)
+    public void PlayOneShot(int audioSourceIndex, int audioClipsIndex, float volumeScale, bool playIfActive) // plays a specific one shot
     {
         if (!playIfActive) // check wether the one shot should play if the audio source is already playing
         {
@@ -86,13 +85,13 @@ public class AudioClipPlayer : MonoBehaviour
         audioSources[audioSourceIndex].PlayOneShot(audioClips[audioClipsIndex], volumeScale); // play the desired one shot
     }
 
-    public void PlayRandomAudioClip(int audioSourceIndex,float volumeScale)
+    public void PlayRandomAudioClip(int audioSourceIndex,float volumeScale) // plays a random one shot
     {
         if (this.audioPlayerType == AudioPlayerType.Muted || audioSources[audioSourceIndex].isPlaying) return; // check wether the one shot should play
         audioSources[audioSourceIndex].PlayOneShot(audioClips[UnityEngine.Random.Range(0,audioClips.Count)], volumeScale); // play the desired one shot
     }
 
-    public void PlayRandomAudioClipRange(int audioSourceIndex, int audioClipsIndexStart, int audioClipsIndexEnd, float volumeScale)
+    public void PlayRandomAudioClipRange(int audioSourceIndex, int audioClipsIndexStart, int audioClipsIndexEnd, float volumeScale) // plays a random one shot in a range
     {
         if (this.audioPlayerType == AudioPlayerType.Muted || audioSources[audioSourceIndex].isPlaying) return; // check wether the one shot should paly
         audioSources[audioSourceIndex].PlayOneShot(audioClips[UnityEngine.Random.Range(audioClipsIndexStart, audioClipsIndexEnd+1)], volumeScale); // play the desired one shot

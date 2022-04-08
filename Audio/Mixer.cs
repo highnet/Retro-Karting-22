@@ -30,9 +30,9 @@ public class Mixer : MonoBehaviour
 
     }
 
-    public void UpdateVolumes()
-    {        
-        // update volumes from player prefs, the player prefs are set by the user with UI sliders, for simplicity, the user can only control master volume, music volume and sfx volume, so environment/car/fx/character are all bundled into the sfx volume slider
+    public void UpdateVolumes() // update volumes from player prefs, the player prefs are set by the user with UI sliders, for simplicity, the user can only control master volume, music volume and sfx volume, so environment/car/fx/character are all bundled into the sfx volume slider
+
+    {
         main.SetFloat("Master", Remap((Mathf.Log10(PlayerPrefs.GetFloat("MasterVolume", 1.0f)) * minimumDB / -2f), minimumDB, 0f, minimumDB, masterMaximumDB)); // set unity's mixer's master volume in decibels according to a logarithmic scale
         main.SetFloat("Music", Remap((Mathf.Log10(PlayerPrefs.GetFloat("MusicVolume", 1.0f)) * minimumDB / -2f), minimumDB, 0f, minimumDB, musicMaximumDB)); // set unity's mixer's music volume in decibels according to a logarithmic scale
         main.SetFloat("Environment", Remap((Mathf.Log10(PlayerPrefs.GetFloat("SFXVolume", 1.0f)) * minimumDB / -2f), minimumDB, 0f, minimumDB, environmentMaximumDB)); // set unity's mixer's sfx volume in decibels according to a logarithmic scale
@@ -42,9 +42,9 @@ public class Mixer : MonoBehaviour
 
     }
 
-    public void UpdateVolumes(SliderType sliderType, float value)
+    public void UpdateVolumes(SliderType sliderType, float value)  // update volumes with the UI sliders, for simplicity, the user can only control master volume, music volume and sfx volume, so environment/car/fx/character are all bundled into the sfx volume slider
+
     {
-        // update volumes with the UI sliders, for simplicity, the user can only control master volume, music volume and sfx volume, so environment/car/fx/character are all bundled into the sfx volume slider
         switch (sliderType) // UI slider fork
         {
             case SliderType.MASTERVOLUME: // master volume slider
@@ -68,18 +68,18 @@ public class Mixer : MonoBehaviour
 
     }
 
-    public float Remap(float value, float from1, float to1, float from2, float to2) 
+    public float Remap(float value, float from1, float to1, float from2, float to2) // remaps values
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2; // linear ratio remap a value from the range [from1,to1] to [from2,to2]
     }
 
-    public void ToggleMutedStatus()
+    public void ToggleMutedStatus() // toggles the muted status
     {
         userSettings.soundMuted = !userSettings.soundMuted; // toggle the user's settings' sound muted variable
         UpdateMutedStatus(); // update the mixer according to the new muted status
     }
 
-    public void UpdateMutedStatus()
+    public void UpdateMutedStatus() // updates the muted status
     {
         PlayerPrefs.SetFloat("SoundMuted?", userSettings.soundMuted ? 1 : 0); // set the sound muted player pref
         PlayerPrefs.Save(); // save the player prefs

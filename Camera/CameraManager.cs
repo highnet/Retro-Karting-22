@@ -47,26 +47,26 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void ActivateEndGameCam()
+    public void ActivateEndGameCam() // activates the endgame camera sequence
+
     {
-        // activates the endgame camera sequence
         mainCVCam.gameObject.SetActive(false); // deactivate the cinemachine main virtual camera
         endGameCVCam.gameObject.SetActive(true); // activate the cinemachine endgame virtual camera
         endGameCVCamOrbitalTransposer = endGameCVCam.GetCinemachineComponent<CinemachineOrbitalTransposer>(); // store a local reference of the endgame cinemachine virtual camera transposer
         DOTween.To(() => endGameCVCamOrbitalValue, (newValue) => endGameCVCamOrbitalValue = newValue, 180f, 18f); // tween the endgame cinemachine virtal camera transposer orbital value from 0 to 180 in 18 seconds
     }
 
-    public void DoSpeedBoostMovement(float zoomOutDuration, float zoomInDuration,float deltaFieldOfView)
+    public void DoSpeedBoostMovement(float zoomOutDuration, float zoomInDuration,float deltaFieldOfView) // simulates a camera doing a speed boost movement, as it follows behind the kart
+
     {
-        // simulates a camera doing a speed boost movement, as it follows behind the kart
         Sequence sequence = DOTween.Sequence(); // create a new sequence
         sequence.Append(DOTween.To(() => currentFieldOfView, (newValue) => currentFieldOfView = newValue, initialFieldOfView + deltaFieldOfView, zoomOutDuration)); // tween the currentFieldOfView from currentFieldOfView to initialfieldOfView + deltaFieldOfView in zoomOutDuration seconds
         sequence.Append(DOTween.To(() => currentFieldOfView, (newValue) => currentFieldOfView = newValue, initialFieldOfView, zoomInDuration)); // then the currentFieldOfView from currentFieldOfView back to the initialFieldOfView in zoomInDuration seconds, back to its original value
     }
 
-    public void DoFlyOverSequence()
+    public void DoFlyOverSequence() // executes through the fly over sequence, beginning at the first dolly path
+
     {
-        // executes through the fly over sequence, beginning at the first dolly path
         if (!flyOverSequenceStarted) // check that the fly over sequence hasn't started yet
         {
             flyOverSequenceStarted = true; // flag the flyover sequence as started
@@ -82,9 +82,9 @@ public class CameraManager : MonoBehaviour
         }
 
     }
-    public void NextFlyoverStep()
+    public void NextFlyoverStep() // executes the next part of the flyover sequence, starting at the next index dolly path
+
     {
-        // executes the next part of the flyover sequence, starting at the next index dolly path
         currentDollyPathIndex++; // increment the index of the current dolly path which the flyover cinemachine virtual camera is currently going through during the flyover sequence
         if (flyOverSequenceEnded || currentDollyPathIndex > dollySmoothPaths.Count - 1) // if the flyover sequence has been marked as ended, or  the current dolly path index is greater than the count of dolly paths
         {
@@ -101,7 +101,7 @@ public class CameraManager : MonoBehaviour
             });
     }
 
-    public void TerminateFlyOverSequence()
+    public void TerminateFlyOverSequence() // terminates the flyover sequence
     {
         flyOverSequenceEnded = true; // flag the flyover sequence as ended
         flyOverCVCam.gameObject.SetActive(false); // deactivate the cinemachine flyover virtual camera
@@ -110,7 +110,7 @@ public class CameraManager : MonoBehaviour
         raceController.racePhase = RacePhase.TimeTrialCountdownRace; // set the race controller's race phase to time trial countdown race
     }
 
-    public void FadeCamInOutBlack()
+    public void FadeCamInOutBlack() // fades the camera in and out black as it changes view in the flyover sequence
     {
         CinemachineStoryboard storyboard = flyOverCVCam.GetComponent<CinemachineStoryboard>(); // get a reference to the cinemachine fly over virtual camera's storyboard
         fadeSequence = DOTween.Sequence(); // create a new sequence
