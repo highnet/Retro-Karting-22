@@ -14,7 +14,7 @@ public class HelperTipContainer : MonoBehaviour
     void Start()
     {
         floatingHelperTipstexts = new string[] { // generate the array of strings of possible helper tips
-                                            "Tip: When driving on curves, press \"CTRL\" to enter a drift",
+                                            "When driving on curves, press \"CTRL\" to enter a drift",
                                             "Drive over the red arrows to get a speed boost!",
                                             "Press \"ENTER\" whenever you wish to consume a speed boost",
                                             "Collect as many coins as you can, as they make you drive faster",
@@ -24,6 +24,7 @@ public class HelperTipContainer : MonoBehaviour
                                             "Press \"L\" to toggle your kart's front lights",
                                             "Take different routes each lap in order to earn more coins",
                                             "Slow down when driving on curvy sections to avoid falling off the track",
+                                            "Pressing and holding the throttle two seconds before the countdown ends will earn you a free speed boost"
         };
         userSettings = FindObjectOfType<UserSettings>(); // store a local reference to the user's settings
         if (!userSettings.hintsAndTips) // check if the user has chosen they dont want to see hints and tips

@@ -318,7 +318,7 @@ public class KartController : MonoBehaviour
         {
             smoke.rateOverTime = Remap(Mathf.Abs(currentThrustForce), 0.0f, currentMaxThrustForce, 100.0f, 600.0f); // set the smoke rate over time
         }
-        if (drifting && driftTimer > driftTimerThreshold1) // if we are drifting and the drift timer is greater than the drift timer threshold 1
+        if (drifting && driftTimer > driftTimerThreshold2) // if we are drifting and the drift timer is greater than the drift timer threshold 2
         {
             deltaThrustForce /= (driftTimer * 0.5f); // slow down the car
         }
@@ -397,7 +397,7 @@ public class KartController : MonoBehaviour
         }
         StartCoroutine(DisableParticleSystemAfterSeconds(engineFire, engineFireDuration)); // start the couroutine which disables the engine fire after engineFireDuration seconds
         cameraManager.DoSpeedBoostMovement(cameraZoomOutDuration, cameraZoomIntDuration, deltaFoV); // do the camera manager speed boost movement
-        rigidBody.AddForce(transform.forward * force, ForceMode.Acceleration); // add a forward force to the kart body
+        rigidBody.AddForce(transform.forward * force, ForceMode.VelocityChange); // add a forward force to the kart body
         Sequence sequence = DOTween.Sequence(); // create a new dotween sequence
         sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, currentMaxForwardVelocity + force, 1.0f)); // add to the sequence a tween that changes the current max forward velocity upwards
         sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, baseMaxforwardVelocity, 1.0f)); // add to the sequence a tween that changes the current max forward velocity back to normal
@@ -458,7 +458,7 @@ public class KartController : MonoBehaviour
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2; // remap a value linearly from [from1 to1] to [from2 to2]
     }
 
-    public IEnumerator BlendEngineSoundsCoroutine()
+    public IEnumerator BlendEngineSoundsCoroutine()                                         // ENGINE SOOUND 
     {
         for (; ; )
         {
@@ -481,7 +481,7 @@ public class KartController : MonoBehaviour
         }
     }
 
-    public IEnumerator UnblockEngineSoundTransitionCoroutine()
+    public IEnumerator UnblockEngineSoundTransitionCoroutine()                            // RELEASES THE BLOCK ON ENGINE SOUNDS TRANSITIONS
     {
         yield return new WaitForSeconds(2f);
         engineTransitionBlocked = false;
@@ -489,11 +489,11 @@ public class KartController : MonoBehaviour
 
     public IEnumerator CrossFadeEngineSoundTransitionCoroutine(int previousStage, int currentStage)
     {
-        if (previousStage < currentStage && !engineTransitionBlocked)
+        if (previousStage < currentStage && !engineTransitionBlocked)             // check if upshift
         {
             engineTransitionBlocked = true;
             StartCoroutine("UnblockEngineSoundTransitionCoroutine");
-            for (float i = 1; i > 0; i -= 0.1f)
+            for (float i = 1; i > 0; i -= 0.1f)                                         // FADE OUT OTHER ENGINE SOUNDS
             {
                 kartClipPlayer.audioSources[3].volume = Mathf.Min(kartClipPlayer.audioSources[3].volume, i);
                 kartClipPlayer.audioSources[4].volume = Mathf.Min(kartClipPlayer.audioSources[4].volume, i);
@@ -508,7 +508,7 @@ public class KartController : MonoBehaviour
             kartClipPlayer.audioSources[9].volume = 0;
             kartClipPlayer.audioSources[10].volume = 0;
             kartClipPlayer.audioSources[11].volume = 1;
-            if (previousStage == 3)
+            if (previousStage == 3)                           // PLAY UP SHIFT TRANSITION
             {
                 kartClipPlayer.PlayOneShot(11, 16, 1f, true);
             }
@@ -525,16 +525,16 @@ public class KartController : MonoBehaviour
                 kartClipPlayer.PlayOneShot(11, 19, 1f, true);
             }
             yield return new WaitForSeconds(0.5f);
-            for (float i = 0; i <= 1; i += 0.1f)
+            for (float i = 0; i <= 1; i += 0.1f)                                        // FADE IN NEW ENGINE SOUNDS
             {
                 kartClipPlayer.audioSources[currentStage].volume = i;
                 yield return new WaitForSeconds(0.001f);
             }
             kartClipPlayer.audioSources[currentStage].volume = 1f;
         }
-        else if (previousStage > currentStage)
+        else if (previousStage > currentStage)                      // check if downshift
         {
-            for (float i = 1; i > 0; i -= 0.1f)
+            for (float i = 1; i > 0; i -= 0.1f)                                         // FADE OUT OTHER ENGINE SOUNDS
             {
                 kartClipPlayer.audioSources[3].volume = Mathf.Min(kartClipPlayer.audioSources[3].volume, i);
                 kartClipPlayer.audioSources[4].volume = Mathf.Min(kartClipPlayer.audioSources[4].volume, i);
@@ -550,7 +550,7 @@ public class KartController : MonoBehaviour
             kartClipPlayer.audioSources[9].volume = 0;
             kartClipPlayer.audioSources[10].volume = 0;
             kartClipPlayer.audioSources[11].volume = 0;
-            for (float i = 0; i <= 1; i += 0.1f)
+            for (float i = 0; i <= 1; i += 0.1f)                                        // FADE IN NEW ENGINE SOUNDS
             {
                 kartClipPlayer.audioSources[currentStage].volume = i;
                 yield return new WaitForSeconds(0.001f);

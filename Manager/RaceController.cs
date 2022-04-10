@@ -24,6 +24,7 @@ public class RaceController : MonoBehaviour
     public FinishLine finishLine; // the finish line
     public List<float> lapTimes; // the list of lap times
     public UIHintsWindow hintsWindow; // the hints window
+    public float boostStartTimer; // the boost start timer
 
     private void Start()
     {
@@ -75,6 +76,11 @@ public class RaceController : MonoBehaviour
             characterController.StartEngine(); // start the engine
             kartController.engineIsRunning = true; // flag the engine is running as true
         }
+        if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer < 2.1 && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
+        {
+            boostStartTimer += Time.deltaTime;
+            Debug.Log(boostStartTimer);
+        }
         if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer == 0) // if the race phase is time trial countdown race and the race start countdown timer is equal to zero
         {
             if (gameStateManager.currentGameMode == GameMode.TimeTrial) // if the current game mode is time trial
@@ -83,7 +89,15 @@ public class RaceController : MonoBehaviour
             }
             kartController.controllable = true; // flag the kart as controllable
             characterController.SayAreYouReady(); // play the character's are you ready sound
+
+            Debug.Log(boostStartTimer);
+
+            if (boostStartTimer > 1.7 && boostStartTimer < 2)
+            {
+                kartController.SpeedBoost(kartController.powerup.speedUpStrength, Color.green, 1.0f, 1.0f, 1.0f, 20f, true, true); // apply the speedboost to the kart
+            }
         }
+
         if (racePhase == RacePhase.TimeTrialRace) // if the race phase is time trial race
         {
             currentLapTimer += Time.deltaTime; // increment the current lap timer
