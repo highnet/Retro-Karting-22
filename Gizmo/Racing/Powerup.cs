@@ -30,7 +30,7 @@ public class Powerup : MonoBehaviour
     public void DoMegaSpeedUp()
     {
         kartController.characterClipPlayer.PlayOneShot(0, 2, 1.0f, true); // play the sound
-        kartController.SpeedBoost(megaSpeedUpStrength, Color.green, 1.0f, 1.0f, 1.0f, 20f,true,true); // apply the speed boost to the kart
+        kartController.SpeedBoost(megaSpeedUpStrength, Color.green, 1.0f, 1.0f, 1.0f, 20f,true,true, ForceMode.Acceleration); // apply the speed boost to the kart
     }
 
     internal void DoIncreaseCoinCount()
@@ -46,6 +46,6 @@ public class Powerup : MonoBehaviour
 
     public void DoSpeedUp()
     {
-        kartController.SpeedBoost(speedUpStrength,Color.green,1.0f,1.0f,1.0f,20f,true,true); // apply the speedboost to the kart
+        kartController.SpeedBoost(speedUpStrength,Color.green,1.0f,1.0f,1.0f,20f,true,true, ForceMode.Acceleration); // apply the speedboost to the kart
     }
 }

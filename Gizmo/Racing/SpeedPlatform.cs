@@ -15,7 +15,7 @@ public class SpeedPlatform : MonoBehaviour
             {
                 kartController = FindObjectOfType<KartController>(); // find the kart controller script
             }
-            kartController.powerup.DoMegaSpeedUp(); // apply the mega speedup to the kart
+            kartController.powerup.DoSpeedUp(); // apply the mega speedup to the kart
         }
     }
 }

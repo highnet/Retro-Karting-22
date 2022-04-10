@@ -92,9 +92,9 @@ public class RaceController : MonoBehaviour
 
             Debug.Log(boostStartTimer);
 
-            if (boostStartTimer > 1.7 && boostStartTimer < 2)
+            if (boostStartTimer > 1.6 && boostStartTimer < 2)
             {
-                kartController.SpeedBoost(kartController.powerup.speedUpStrength, Color.green, 1.0f, 1.0f, 1.0f, 20f, true, true); // apply the speedboost to the kart
+                kartController.SpeedBoost(100f , Color.green, 1.0f, 1.0f, 1.0f, 20f, true, true, ForceMode.VelocityChange); // apply the speedboost to the kart
             }
         }
 

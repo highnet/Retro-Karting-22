@@ -161,15 +161,15 @@ public class KartController : MonoBehaviour
             burstDriftParticlesEnabled = false; // flag burst drift particles as disabled
             if (driftTimer > driftTimerThreshold2) // if the drift timer is greater than the drift timer threshold 2
             {
-                SpeedBoost(driftTimerThreshold2SpeedBoostForce, Color.red, 0.8f, 0.8f, 1.2f, 25, false, false); // do a speed boost
+                SpeedBoost(driftTimerThreshold2SpeedBoostForce, Color.red, 0.8f, 0.8f, 1.2f, 25, false, false, ForceMode.Acceleration); // do a speed boost
             }
             else if (driftTimer > driftTimerThreshold1) // if the drift timer is greater than the drift timer threshold 1
             {
-                SpeedBoost(driftTimerThreshold1SpeedBoostForce, Color.yellow, 1.0f, 1.0f, 1.0f, 15, false, false); // do a speed boost
+                SpeedBoost(driftTimerThreshold1SpeedBoostForce, Color.yellow, 1.0f, 1.0f, 1.0f, 15, false, false, ForceMode.Acceleration); // do a speed boost
             }
             else if (driftTimer > driftTimerThreshold0) // if the drift timer is greater than the drift timer threshold 0
             {
-                SpeedBoost(driftTimerThreshold0SpeedBoostForce, Color.white, 1.2f, 1.2f, 1.8f, 10, false, false); // do a speed boost
+                SpeedBoost(driftTimerThreshold0SpeedBoostForce, Color.white, 1.2f, 1.2f, 1.8f, 10, false, false, ForceMode.Acceleration); // do a speed boost
             }
             driftTimer = 0; // reset the drift timer to 0
         }
@@ -320,7 +320,7 @@ public class KartController : MonoBehaviour
         }
         if (drifting && driftTimer > driftTimerThreshold2) // if we are drifting and the drift timer is greater than the drift timer threshold 2
         {
-            deltaThrustForce /= (driftTimer * 0.5f); // slow down the car
+            deltaThrustForce /= ((driftTimer/2) * 0.8f); // slow down the car
         }
 
         if (braking) // if we are braking
@@ -379,7 +379,7 @@ public class KartController : MonoBehaviour
         }
     }
 
-    public void SpeedBoost(float force, Color color, float engineFireDuration, float cameraZoomOutDuration, float cameraZoomIntDuration, float deltaFoV, bool playKartSound, bool playCharacterSound)
+    public void SpeedBoost(float force, Color color, float engineFireDuration, float cameraZoomOutDuration, float cameraZoomIntDuration, float deltaFoV, bool playKartSound, bool playCharacterSound, ForceMode forceMode)
     {
         if (!engineFire.isPlaying) // check if the engine fire is not playing
         {
@@ -397,7 +397,7 @@ public class KartController : MonoBehaviour
         }
         StartCoroutine(DisableParticleSystemAfterSeconds(engineFire, engineFireDuration)); // start the couroutine which disables the engine fire after engineFireDuration seconds
         cameraManager.DoSpeedBoostMovement(cameraZoomOutDuration, cameraZoomIntDuration, deltaFoV); // do the camera manager speed boost movement
-        rigidBody.AddForce(transform.forward * force, ForceMode.VelocityChange); // add a forward force to the kart body
+        rigidBody.AddForce(transform.forward * force, forceMode); // add a forward force to the kart body
         Sequence sequence = DOTween.Sequence(); // create a new dotween sequence
         sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, currentMaxForwardVelocity + force, 1.0f)); // add to the sequence a tween that changes the current max forward velocity upwards
         sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, baseMaxforwardVelocity, 1.0f)); // add to the sequence a tween that changes the current max forward velocity back to normal

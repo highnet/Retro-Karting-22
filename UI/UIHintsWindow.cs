@@ -115,7 +115,7 @@ public class UIHintsWindow : MonoBehaviour
                 hintDisplay7.sprite = sprites[8]; // display the RIGHT key image
                 hintDisplay6.rectTransform.DOPunchScale(new Vector3(punchScaleMagnitude, punchScaleMagnitude, 1.0f), punchScaleDurationSeconds, punchScaleVibrato, punchScaleElasticity).SetLoops(numberOfLoops); // tween the DOWN key
                 hintText0.text = "Press S or DOWN to go in reverse"; // set the hints text
-                videoHintDisplay0.gameObject.SetActive(true); // activate the video hints display
+               videoHintDisplay0.gameObject.SetActive(true); // activate the video hints display
                 videoHintDisplay0.clip = videoClips[2]; // set the video clip 
                 videoBorder.gameObject.SetActive(true); // activate the video border
                 break;
@@ -157,8 +157,8 @@ public class UIHintsWindow : MonoBehaviour
                 hintDisplay0.rectTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 hintDisplay0.rectTransform.DOPunchScale(new Vector3(punchScaleMagnitude, punchScaleMagnitude, 1.0f), 1.0f, punchScaleVibrato, punchScaleElasticity).SetLoops(numberOfLoops);
                 hintText1.text = "Press L to toggle the headlights"; // set the hints text
-                videoHintDisplay0.gameObject.SetActive(true); // activate the video hints display
-                videoHintDisplay0.clip = videoClips[6]; // set the video clip 
+               videoHintDisplay0.gameObject.SetActive(true); // activate the video hints display
+               videoHintDisplay0.clip = videoClips[6]; // set the video clip 
                 videoBorder.gameObject.SetActive(true); // activate the video border
                 break;
             case 7: // hint 7 (PAUSE GAME)
@@ -166,7 +166,7 @@ public class UIHintsWindow : MonoBehaviour
                 hintDisplay0.rectTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 hintDisplay0.rectTransform.DOPunchScale(new Vector3(punchScaleMagnitude, punchScaleMagnitude, 1.0f), 1.0f, punchScaleVibrato, punchScaleElasticity).SetLoops(numberOfLoops);
                 hintText1.text = "Press ESC to pause the game"; // set the hints text
-                videoHintDisplay0.gameObject.SetActive(true); // activate the video hints display
+               videoHintDisplay0.gameObject.SetActive(true); // activate the video hints display
                 videoHintDisplay0.clip = videoClips[7]; // set the video clip 
                 videoBorder.gameObject.SetActive(true); // activate the video border
                 break;
