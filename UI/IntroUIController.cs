@@ -32,6 +32,12 @@ public class IntroUIController : MonoBehaviour
             PlayerPrefs.SetInt("ChosenKartBodyIndex", 0); // set the default chosen kart index
             PlayerPrefs.Save(); // save the player prefs
         }
+
+        if (SaveSystem.LoadCollectibles() == null)
+        {
+            SaveSystem.SaveCollectibles(SaveSystem.GenerateDefaultCollectibles());
+        }
+
         pressToContinueTextStartScaleX = pressToContinueText.transform.localScale.x; // set the press to continue start scale x magnitude
         pressToContinueTextStartScaleY = pressToContinueText.transform.localScale.y; // set the press to continue start scale y magnitude
         DOTween.To(() => pressToContinueTextAlpha, (newValue) => pressToContinueTextAlpha = newValue, 0f, 600f).SetEase(Ease.InOutFlash, 300f, 0f); // tween the press to continue text alpha as an oscillation

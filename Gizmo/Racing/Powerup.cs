@@ -35,7 +35,7 @@ public class Powerup : MonoBehaviour
 
     internal void DoIncreaseCoinCount()
     {
-        kartController.characterClipPlayer.PlayOneShot(0, 3, 1.0f, true); // play the sound
+        kartController.characterClipPlayer.PlayOneShot(0, 3, 1.0f, false); // play the sound
         if (kartController.coinCount < 10) // if the kart has less than 10 coins
         {
             kartController.coinCount++; // increment the coin count

@@ -30,8 +30,8 @@ public class AudioClipPlayer : MonoBehaviour
         }
         if (audioPlayerType == AudioPlayerType.Jukebox) // jukebox player
         {
-            audioSources[0].clip = audioClips[0]; // start playing the correct audio clips
-            audioSources[0].Play();
+            jukeboxIndex = (int)UnityEngine.Random.Range(0, audioClips.Count);
+            PlayNextJukeboxSong();
         }
         if (audioPlayerType == AudioPlayerType.KartBody) // kartbody player
         {

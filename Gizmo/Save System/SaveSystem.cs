@@ -33,6 +33,43 @@ public static class SaveSystem
         }
     }
 
+
+    public static void SaveCollectibles(Collectibles collectibles)
+    {
+        BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to write to file
+        string path = Application.persistentDataPath + "/collectibles.sav"; // generate the path to save the records
+        FileStream stream = new FileStream(path, FileMode.Create); // create a new file stream in create mode order to write to file
+        formatter.Serialize(stream, collectibles); // serialize the records into the filepath using the file stream
+        stream.Close(); // close the stream
+    }
+
+    public static Collectibles LoadCollectibles()
+    {
+        string path = Application.persistentDataPath + "/collectibles.sav"; // generate teh path to load ther ecords
+        if (File.Exists(path)) // if the file path exists
+        {
+            BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to read from file
+            FileStream stream = new FileStream(path, FileMode.Open); // create a new file stream in open mode in order to open from file
+            Collectibles collectibles = (Collectibles)formatter.Deserialize(stream); // deserialize the records
+            stream.Close(); // close the stream
+            return collectibles; // return the records
+        }
+        else
+        {
+            return null; // else return null
+        }
+    }
+
+    public static Collectibles GenerateDefaultCollectibles()
+    {
+        Dictionary<string, bool[]> registry = new Dictionary<string, bool[]>(); // create a new empty registr
+
+        registry.Add(Track.Track0.ToString(), new bool[] { false, false, false, false, false, false, false, false });
+        registry.Add(Track.Track1.ToString(), new bool[] { false, false, false, false, false, false, false, false });
+
+        return new Collectibles(registry); // return the registry
+    }
+
     public static Records GenerateDefaultRecords()
     {
         Dictionary<string, List<RecordEntry>> registry = new Dictionary<string, List<RecordEntry>>(); // create a new empty registr
