@@ -25,6 +25,7 @@ public class RaceController : MonoBehaviour
     public List<float> lapTimes; // the list of lap times
     public UIHintsWindow hintsWindow; // the hints window
     public float boostStartTimer; // the boost start timer
+    public GhostRacerLoader ghostRacerLoader;
 
     private void Start()
     {
@@ -47,6 +48,7 @@ public class RaceController : MonoBehaviour
         cameraManager.endGameCVCam.Follow = kartController.transform; // set the cinemachine end game virtual camera folow to the kart c ontroller
         finishLine = GetComponentInChildren<FinishLine>(); // store a local reference to the finsih line
         hintsWindow = FindObjectOfType<UIHintsWindow>(); // store a local reference to the hints window
+        ghostRacerLoader = FindObjectOfType<GhostRacerLoader>();
     }
 
     private void Update()
@@ -88,6 +90,7 @@ public class RaceController : MonoBehaviour
                 racePhase = RacePhase.TimeTrialRace; // set the race phase to time trial race
             }
             kartController.controllable = true; // flag the kart as controllable
+            ghostRacerLoader.SetSpeed();
             characterController.SayAreYouReady(); // play the character's are you ready sound
 
             Debug.Log(boostStartTimer);

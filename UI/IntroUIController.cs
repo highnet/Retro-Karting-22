@@ -24,10 +24,10 @@ public class IntroUIController : MonoBehaviour
     {
         sceneManager = GameObject.FindGameObjectWithTag("Scene Manager").GetComponent<SceneManager>(); // store a local reference to the scene's manager
         mixerMain = GameObject.FindGameObjectWithTag("Mixer").GetComponent<Mixer>(); // store a local reference to the main mixer
-        if(SaveSystem.LoadRecords() == null || PlayerPrefs.GetInt("ResettedRecordsSince240320221803", 0) == 0) // check if there are no records on file or the records havent been force resetted since a specific timestamp with the force reset tag
+        if(SaveSystem.LoadRecords() == null || PlayerPrefs.GetInt("ResettedRecordsSince120420221454", 0) == 0) // check if there are no records on file or the records havent been force resetted since a specific timestamp with the force reset tag
         {
             SaveSystem.SaveRecords(SaveSystem.GenerateDefaultRecords()); // generate default records and save them on file
-            PlayerPrefs.SetInt("ResettedRecordsSince240320221803", 1); // set the force reset tag on player prefs
+            PlayerPrefs.SetInt("ResettedRecordsSince120420221454", 1); // set the force reset tag on player prefs
             PlayerPrefs.SetInt("ChosenCharacterIndex", 0); // set the default chosen character index
             PlayerPrefs.SetInt("ChosenKartBodyIndex", 0); // set the default chosen kart index
             PlayerPrefs.Save(); // save the player prefs
@@ -36,6 +36,11 @@ public class IntroUIController : MonoBehaviour
         if (SaveSystem.LoadCollectibles() == null)
         {
             SaveSystem.SaveCollectibles(SaveSystem.GenerateDefaultCollectibles());
+        }
+
+        if (SaveSystem.LoadGhostRider() == null)
+        {
+            SaveSystem.SaveGhostRider(SaveSystem.GenerateDefaultGhostRider());
         }
 
         pressToContinueTextStartScaleX = pressToContinueText.transform.localScale.x; // set the press to continue start scale x magnitude

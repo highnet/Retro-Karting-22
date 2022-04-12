@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,12 +68,20 @@ public class KartController : MonoBehaviour
     public bool engineIsRunning; // the status of wether the engine is running or not
     public bool braking; // the status of wether the kart is braking ro not
     public bool brakeSoundPlayed; // the status of wether the brake sound has already placed once or not
+    public OutOfBounds outOfBounds;
+    public bool respawning;
+    public GhostRacerSaver ghostRacerSaver;
+    public RaceController raceController;
+
 
     void Start()
     {
         currentMaxForwardVelocity = baseMaxforwardVelocity; // set the current max forward velocity to the base max forward velocity
         currentMaxThrustForce = baseMaxThrustForce; // set the current max thrust force to the base max thrust force
         racingUIController = FindObjectOfType<RacingUIController>(); // store a local reference to the racing ui controller
+        outOfBounds = FindObjectOfType<OutOfBounds>();
+        raceController = FindObjectOfType<RaceController>();
+        ghostRacerSaver = FindObjectOfType<GhostRacerSaver>();
     }
 
     void Update()
@@ -410,6 +419,11 @@ public class KartController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (raceController.racePhase == RaceController.RacePhase.TimeTrialRace)
+        {
+            ghostRacerSaver.Add(transform.position);
+        }
+
         rigidBody.AddForce(Vector3.down * gravity, ForceMode.Acceleration); // add a downwards gravity force to the kart
         if (!controllable) // check if we are not controllable
         {
@@ -446,6 +460,8 @@ public class KartController : MonoBehaviour
                 driftCooldownTimer = 0; // set it back to zero
             }
         }
+
+
     }
 
     public void DoSteering(int direction, float amount)
@@ -611,5 +627,26 @@ public class KartController : MonoBehaviour
         dust = GameObject.FindGameObjectsWithTag("Dust")[0].GetComponent<ParticleSystem>();
         landingDust = GameObject.FindGameObjectsWithTag("Landing Dust")[0].GetComponent<ParticleSystem>();
         cameraManager = GameObject.FindObjectOfType<CameraManager>();
+    }
+
+    public IEnumerator RespawnAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        GameObject respawnPoint = outOfBounds.GetFurthrestRespawnPoint();
+        GameObject collider = GameObject.Find("Collider");
+        collider.transform.position = respawnPoint.transform.position;
+        transform.eulerAngles = new Vector3(0, respawnPoint.transform.eulerAngles.y, 0); // set the kart rotation
+        respawning = false;
+        controllable = true;
+    }
+    public void Respawn()
+    {
+        if (!respawning)
+        {
+            StartCoroutine("RespawnAfterSeconds", 3.0f);
+            respawning = true;
+            controllable = false;
+        }
+        
     }
 }

@@ -17,7 +17,7 @@ public class PizzaCollectible : MonoBehaviour
         {
             this.transform.Translate(new Vector3(1000f, 1000f, 1000f)); // move the powerup trigger off map
         }
-        transform.DOLocalRotate(new Vector3(0, 0, 360), 10f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
+        transform.DOLocalRotate(new Vector3(0, 0, 360), 5f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
 
         achievements = FindObjectOfType<Achievements>();
 

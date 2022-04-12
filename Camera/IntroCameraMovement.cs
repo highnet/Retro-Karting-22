@@ -23,7 +23,7 @@ public class IntroCameraMovement : MonoBehaviour
         dolly = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTrackedDolly>(); // store a local reference of the cinemachine virtual camera's dolly
         composer = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineComposer>(); // store a local reference of the cinemachine virtual camera's composer
         storyboard = cinemachineVirtualCamera.GetComponent<CinemachineStoryboard>(); // store a local reference of the cinemachine virtual camera's storyboard
-        composer.m_TrackedObjectOffset.x = -80.0f; // set the composer's tracked object offset x axis to -80
+        composer.m_TrackedObjectOffset.x = 80.0f; // set the composer's tracked object offset x axis to -80
         storyboard.m_Alpha = 1.0f; // set the storyboard's alpha to 1
         storyboard.m_ShowImage = true; // show the storyboard's image
         pathPosition = (DOTween.To(() => dolly.m_PathPosition, (newValue) => dolly.m_PathPosition = newValue, 2.0f, 200.0f)).SetEase(Ease.InOutSine); // tween the dolly's path position from 0 to 2 in 200 seconds
