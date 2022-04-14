@@ -107,25 +107,25 @@ public static class SaveSystem
     {
         Dictionary<string, List<RecordEntry>> registry = new Dictionary<string, List<RecordEntry>>(); // create a new empty registr
         List<RecordEntry> track0Records = new List<RecordEntry>(); // genereate the track 0 record entry list
-        track0Records.Add(new RecordEntry(300, "Heidi", Character.Character0, KartBody.Kart0)); // create the default records
-        track0Records.Add(new RecordEntry(290, "Grace", Character.Character0, KartBody.Kart1));
-        track0Records.Add(new RecordEntry(280, "Frank", Character.Character1, KartBody.Kart0));
-        track0Records.Add(new RecordEntry(270, "Erin", Character.Character1, KartBody.Kart0));
-        track0Records.Add(new RecordEntry(260, "Dave", Character.Character1, KartBody.Kart1));
-        track0Records.Add(new RecordEntry(250,"Charlie", Character.Character0,KartBody.Kart0));
-        track0Records.Add(new RecordEntry(240, "Bob", Character.Character0, KartBody.Kart1));
-        track0Records.Add(new RecordEntry(230, "Alice", Character.Character0, KartBody.Kart1));
+        track0Records.Add(new RecordEntry(123, "Heidi", Character.Character0, KartBody.Kart0)); // create the default records
+        track0Records.Add(new RecordEntry(127, "Grace", Character.Character1, KartBody.Kart1));
+        track0Records.Add(new RecordEntry(130, "Frank", Character.Character1, KartBody.Kart1));
+        track0Records.Add(new RecordEntry(134, "Erin", Character.Character0, KartBody.Kart0));
+        track0Records.Add(new RecordEntry(135, "Dave", Character.Character1, KartBody.Kart0));
+        track0Records.Add(new RecordEntry(136,"Charlie", Character.Character1,KartBody.Kart0));
+        track0Records.Add(new RecordEntry(140, "Bob", Character.Character0, KartBody.Kart1));
+        track0Records.Add(new RecordEntry(150, "Alice", Character.Character1, KartBody.Kart0));
         track0Records = SortRecordEntries(track0Records); // sort the track entries
         registry.Add(Track.Track0.ToString(), track0Records); // add the records to the registry
         List<RecordEntry> track1records = new List<RecordEntry>(); // genereate the track 1 record entry list
-        track1records.Add(new RecordEntry(300, "Heidi", Character.Character0, KartBody.Kart0)); // create the default records
-        track1records.Add(new RecordEntry(290, "Grace", Character.Character0, KartBody.Kart1));
-        track1records.Add(new RecordEntry(280, "Frank", Character.Character1, KartBody.Kart0));
-        track1records.Add(new RecordEntry(270, "Erin", Character.Character1, KartBody.Kart0));
-        track1records.Add(new RecordEntry(260, "Dave", Character.Character1, KartBody.Kart1));
-        track1records.Add(new RecordEntry(250, "Charlie", Character.Character1, KartBody.Kart0));
-        track1records.Add(new RecordEntry(240, "Bob", Character.Character1, KartBody.Kart1));
-        track1records.Add(new RecordEntry(230, "Alice", Character.Character0, KartBody.Kart1));
+        track1records.Add(new RecordEntry(170, "Heidi", Character.Character0, KartBody.Kart1)); // create the default records
+        track1records.Add(new RecordEntry(172, "Grace", Character.Character1, KartBody.Kart1));
+        track1records.Add(new RecordEntry(175, "Frank", Character.Character1, KartBody.Kart1));
+        track1records.Add(new RecordEntry(180, "Erin", Character.Character0, KartBody.Kart0));
+        track1records.Add(new RecordEntry(183, "Dave", Character.Character0, KartBody.Kart1));
+        track1records.Add(new RecordEntry(194, "Charlie", Character.Character1, KartBody.Kart0));
+        track1records.Add(new RecordEntry(200, "Bob", Character.Character1, KartBody.Kart1));
+        track1records.Add(new RecordEntry(210, "Alice", Character.Character1, KartBody.Kart0));
         track1records = SortRecordEntries(track1records); // sort the track entries
         registry.Add(Track.Track1.ToString(), track1records); // add the records to the registry
         return new Records(registry); // return the registry

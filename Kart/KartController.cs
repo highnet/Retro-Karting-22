@@ -643,7 +643,8 @@ public class KartController : MonoBehaviour
     {
         if (!respawning)
         {
-            StartCoroutine("RespawnAfterSeconds", 3.0f);
+            StartCoroutine("RespawnAfterSeconds", 2.0f);
+            cameraManager.FadeMainCamInOutBlack();
             respawning = true;
             controllable = false;
         }

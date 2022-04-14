@@ -77,7 +77,7 @@ public class CameraManager : MonoBehaviour
             flyOverCVCam.LookAt = dollyLookAts[0]; // set the cinemachine fly over virtual camera's lookat to the first element of the positions of the cinemachine dolly paths lookat objects for the flyover camera sequence
             DOTween.To(() => dolly.m_PathPosition, (newValue) => dolly.m_PathPosition = newValue, 1.0f, 5.0f) // tween the dolly's path position from 0 to 1 in 5 seconds ...
                 .OnComplete(() => { // ... and when its finished ...
-                    FadeCamInOutBlack(); // ...fade out the camera and then back in in a new dolly path position
+                    FadeFlyoverCamInOutBlack(); // ...fade out the camera and then back in in a new dolly path position
                 });
         }
 
@@ -97,7 +97,7 @@ public class CameraManager : MonoBehaviour
         flyOverCVCam.LookAt = dollyLookAts[currentDollyPathIndex]; // set the cinemachine fly over virtual camera look at to the next dolly path
         DOTween.To(() => dolly.m_PathPosition, (newValue) => dolly.m_PathPosition = newValue, 1.0f, 5.0f) // tween the dolly's path position from 0 to 1 in 5 seconds ...
             .OnComplete(() => { // ... and when its finished ...
-                FadeCamInOutBlack(); // ...fade out the camera and then back in in a new dolly path position
+                FadeFlyoverCamInOutBlack(); // ...fade out the camera and then back in in a new dolly path position
             });
     }
 
@@ -110,7 +110,7 @@ public class CameraManager : MonoBehaviour
         raceController.racePhase = RacePhase.TimeTrialCountdownRace; // set the race controller's race phase to time trial countdown race
     }
 
-    public void FadeCamInOutBlack() // fades the camera in and out black as it changes view in the flyover sequence
+    public void FadeFlyoverCamInOutBlack() // fades the camera in and out black as it changes view in the flyover sequence
     {
         CinemachineStoryboard storyboard = flyOverCVCam.GetComponent<CinemachineStoryboard>(); // get a reference to the cinemachine fly over virtual camera's storyboard
         fadeSequence = DOTween.Sequence(); // create a new sequence
@@ -120,5 +120,16 @@ public class CameraManager : MonoBehaviour
             }));
         fadeSequence.AppendInterval(0.5f); // wait 0.5 seconds
         fadeSequence.Append(DOTween.To(() => storyboard.m_Alpha, (newValue) => storyboard.m_Alpha = newValue, 0.0f, .25f).SetEase(Ease.Linear)); // tween the storyboard's alpha from 1 back to 0 in .25 seconds
+    }
+
+    public void FadeMainCamInOutBlack()
+    {
+        CinemachineStoryboard storyboard = mainCVCam.GetComponent<CinemachineStoryboard>();
+        fadeSequence = DOTween.Sequence();
+        fadeSequence.Append(DOTween.To(() => storyboard.m_Alpha, (newValue) => storyboard.m_Alpha = newValue, 1.0f, 1f));
+        fadeSequence.AppendInterval(1.5f); // wait 0.5 seconds
+        fadeSequence.Append(DOTween.To(() => storyboard.m_Alpha, (newValue) => storyboard.m_Alpha = newValue, 0.0f, .5f)); // tween the storyboard's alpha from 1 back to 0 in .25 seconds
+
+
     }
 }

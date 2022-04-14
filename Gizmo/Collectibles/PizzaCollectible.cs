@@ -9,6 +9,7 @@ public class PizzaCollectible : MonoBehaviour
     public Track track;
     public int collectibleID;
     public Achievements achievements;
+    public KartController kartController;
 
     private void Start()
     {
@@ -20,7 +21,6 @@ public class PizzaCollectible : MonoBehaviour
         transform.DOLocalRotate(new Vector3(0, 0, 360), 5f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
 
         achievements = FindObjectOfType<Achievements>();
-
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -41,7 +41,8 @@ public class PizzaCollectible : MonoBehaviour
                 }
             }
             achievements.SetPizzas((int) track, numberOfPizzas);
-
+            kartController = FindObjectOfType<KartController>();
+            kartController.characterClipPlayer.PlayOneShot(0, 7, 1.0f, true);
         }
     }
 }
