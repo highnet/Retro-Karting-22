@@ -421,7 +421,7 @@ public class KartController : MonoBehaviour
     {
         if (raceController.racePhase == RaceController.RacePhase.TimeTrialRace)
         {
-            ghostRacerSaver.Add(transform.position);
+            ghostRacerSaver.Add(transform.position,raceController.totalLapTimer);
         }
 
         rigidBody.AddForce(Vector3.down * gravity, ForceMode.Acceleration); // add a downwards gravity force to the kart

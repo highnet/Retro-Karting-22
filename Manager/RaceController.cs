@@ -81,7 +81,6 @@ public class RaceController : MonoBehaviour
         if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer < 2.1 && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
         {
             boostStartTimer += Time.deltaTime;
-            Debug.Log(boostStartTimer);
         }
         if (racePhase == RacePhase.TimeTrialCountdownRace && raceStartCountdownTimer == 0) // if the race phase is time trial countdown race and the race start countdown timer is equal to zero
         {
@@ -90,10 +89,8 @@ public class RaceController : MonoBehaviour
                 racePhase = RacePhase.TimeTrialRace; // set the race phase to time trial race
             }
             kartController.controllable = true; // flag the kart as controllable
-            ghostRacerLoader.SetSpeed();
+            ghostRacerLoader.Activate();
             characterController.SayAreYouReady(); // play the character's are you ready sound
-
-            Debug.Log(boostStartTimer);
 
             if (boostStartTimer > 1.6 && boostStartTimer < 2)
             {

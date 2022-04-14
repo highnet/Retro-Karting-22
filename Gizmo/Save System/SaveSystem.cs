@@ -62,7 +62,7 @@ public static class SaveSystem
 
     internal static GhostRiderEntries GenerateDefaultGhostRider()
     {
-        GhostRaceEntry defaultGhostRaceEntry = new GhostRaceEntry(null,0);
+        GhostRaceEntry defaultGhostRaceEntry = new GhostRaceEntry(null,null);
         GhostRaceEntry[] defaultGhostRaceEntries = new GhostRaceEntry[] { defaultGhostRaceEntry, defaultGhostRaceEntry };
         return new GhostRiderEntries(defaultGhostRaceEntries);
     }
