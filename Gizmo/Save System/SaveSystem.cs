@@ -10,7 +10,7 @@ using System;
 public static class SaveSystem
 {
 
-    public static void SaveGhostRider(GhostRiderEntries ghostRiderEntries)
+    public static void SaveGhostRider(GhostRacerRegistry ghostRiderEntries)
     {
         BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to write to file
         string path = Application.persistentDataPath + "/ghostrider.sav"; // generate the path to save the records
@@ -19,14 +19,14 @@ public static class SaveSystem
         stream.Close(); // close the stream
     }
 
-    public static GhostRiderEntries LoadGhostRider()
+    public static GhostRacerRegistry LoadGhostRider()
     {
         string path = Application.persistentDataPath + "/ghostrider.sav"; // generate teh path to load ther ecords
         if (File.Exists(path)) // if the file path exists
         {
             BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to read from file
             FileStream stream = new FileStream(path, FileMode.Open); // create a new file stream in open mode in order to open from file
-            GhostRiderEntries entries = (GhostRiderEntries)formatter.Deserialize(stream); // deserialize the records
+            GhostRacerRegistry entries = (GhostRacerRegistry)formatter.Deserialize(stream); // deserialize the records
             stream.Close(); // close the stream
             return entries; // return the records
         }
@@ -60,11 +60,15 @@ public static class SaveSystem
         }
     }
 
-    internal static GhostRiderEntries GenerateDefaultGhostRider()
+    public static GhostRacerRegistry GenerateDefaultGhostRider()
     {
         GhostRaceEntry defaultGhostRaceEntry = new GhostRaceEntry(null,null);
-        GhostRaceEntry[] defaultGhostRaceEntries = new GhostRaceEntry[] { defaultGhostRaceEntry, defaultGhostRaceEntry };
-        return new GhostRiderEntries(defaultGhostRaceEntries);
+        GhostRaceEntry[][] defaultGhostRaceEntries = new GhostRaceEntry[][]  
+        { 
+            new GhostRaceEntry[] { defaultGhostRaceEntry, defaultGhostRaceEntry, defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry, defaultGhostRaceEntry  },
+            new GhostRaceEntry[] { defaultGhostRaceEntry, defaultGhostRaceEntry, defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry, defaultGhostRaceEntry  }
+        };
+        return new GhostRacerRegistry(defaultGhostRaceEntries);
     }
 
     public static void SaveCollectibles(Collectibles collectibles)

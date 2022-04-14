@@ -11,38 +11,100 @@ public class GhostRacerSaver : MonoBehaviour
     public FinishLine finishLine;
     public FinishLine.Track track;
     public int numberOfNodes;
+    public RaceController raceController;
+    int numberOfGhostRacers = 8;
 
     private void Start()
     {
         ghostRacerPositions = new List<SerializableVector3>();
         ghostRacerTimestamps = new List<float>();
         finishLine = FindObjectOfType<FinishLine>();
+        raceController = FindObjectOfType<RaceController>();
         track = finishLine.track;
     }
-    public void Add(Vector3 position,float timestamp)
+    public void Add(Vector3 position, float timestamp)
     {
         ghostRacerPositions.Add(position);
         ghostRacerTimestamps.Add(timestamp);
         numberOfNodes++;
     }
 
-    public void SavePath(Track track, float elapsedTime)
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.K))
+        {
+            SavePath(track);
+        }
+    }
+
+    public void SavePath(Track track)
     {
         GhostRaceEntry newEntry = new GhostRaceEntry(ghostRacerPositions, ghostRacerTimestamps);
-        GhostRiderEntries ghostRiderEntries = SaveSystem.LoadGhostRider();
+        GhostRacerRegistry ghostRiderEntries = SaveSystem.LoadGhostRider();
 
-        GhostRaceEntry[] previousEntries = ghostRiderEntries.entries;
-        GhostRaceEntry previousEntry = previousEntries[(int)track];
+        GhostRaceEntry[][] previousEntries = ghostRiderEntries.entries;
 
-        if (previousEntry.timeStamps != null)
+        int indexToPlace = 0;
+
+        Debug.Log("=================");
+        for (int i = 0; i < numberOfGhostRacers; i++)
         {
-            float previousEntryElapsedTime = previousEntry.timeStamps[previousEntry.timeStamps.Count - 1];
-            if (previousEntryElapsedTime < elapsedTime) return;
 
+            if (ghostRiderEntries.entries[(int)track][i].timeStamps == null)
+            {
+                Debug.Log("null");
+            }
+            else
+            {
+                Debug.Log(ghostRiderEntries.entries[(int)track][i].timeStamps[ghostRiderEntries.entries[(int)track][i].timeStamps.Count - 1]);
+            }
+        }
+        Debug.Log("=================");
+
+
+        for (int i = 0; i < numberOfGhostRacers; i++)
+        {
+            GhostRaceEntry previousEntry = previousEntries[(int)track][i];
+
+            if (previousEntry.timeStamps == null)
+            {
+                ghostRiderEntries.entries[(int)track][i] = newEntry;
+                break;
+            }
+
+            if (previousEntry.timeStamps != null)
+            {
+                float previousEntryElapsedTime = previousEntry.timeStamps[previousEntry.timeStamps.Count - 1];
+                if (raceController.totalLapTimer < previousEntryElapsedTime)
+                {
+                    indexToPlace = i;
+                    for (int j = numberOfGhostRacers; j > indexToPlace + 1; j--)
+                    {
+                        ghostRiderEntries.entries[(int)track][j-1] = ghostRiderEntries.entries[(int)track][j-2];
+                    }
+                    ghostRiderEntries.entries[(int)track][indexToPlace] = newEntry;
+                    break;
+                }
+            }
         }
 
-
-        ghostRiderEntries.entries[(int)track] = newEntry;
         SaveSystem.SaveGhostRider(ghostRiderEntries);
+
+        Debug.Log("=================");
+        for (int i = 0; i < numberOfGhostRacers; i++)
+        {
+
+            if (ghostRiderEntries.entries[(int)track][i].timeStamps == null)
+            {
+                Debug.Log("null");
+            }
+            else
+            {
+                Debug.Log(ghostRiderEntries.entries[(int)track][i].timeStamps[ghostRiderEntries.entries[(int)track][i].timeStamps.Count - 1]);
+            }
+        }
+        Debug.Log("=================");
+
+
     }
 }

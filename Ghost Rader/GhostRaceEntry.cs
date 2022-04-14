@@ -13,6 +13,4 @@ public class GhostRaceEntry
         positions = _positions; // set the registry based on the input parameter
         timeStamps = _timeStamps;
     }
-
-
 }
