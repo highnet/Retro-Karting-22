@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SpeedPlatformType {PowerUp, VelocityMod}
+
 public class SpeedPlatform : MonoBehaviour
 {
 
     private KartController kartController;
+    public SpeedPlatformType platformType;
+    public float speedBoost;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,7 +19,23 @@ public class SpeedPlatform : MonoBehaviour
             {
                 kartController = FindObjectOfType<KartController>(); // find the kart controller script
             }
-            kartController.powerup.DoSpeedUp(); // apply the mega speedup to the kart
+
+            switch (platformType)
+            {
+                case SpeedPlatformType.VelocityMod: 
+                    kartController.SpeedBoost(speedBoost, Color.green, 1.0f, 1.0f, 1.0f, 20f, true, true, ForceMode.VelocityChange); // apply the speedboost to the kart
+                    break;
+                case SpeedPlatformType.PowerUp:
+                    kartController.powerup.DoSpeedUp(); // apply the mega speedup to the kart
+                    break;
+                default:
+                    kartController.powerup.DoSpeedUp(); // apply the mega speedup to the kart
+                    break;
+            }
+           
+
+          
+          //kartController.SpeedBoost(speedUpStrength, Color.green, 1.0f, 1.0f, 1.0f, 20f, true, true, ForceMode.Acceleration); // apply the speedboost to the kart
         }
     }
 }

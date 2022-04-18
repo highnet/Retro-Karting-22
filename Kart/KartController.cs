@@ -645,6 +645,21 @@ public class KartController : MonoBehaviour
         {
             StartCoroutine("RespawnAfterSeconds", 2.0f);
             cameraManager.FadeMainCamInOutBlack();
+            drifting = false;
+            driftParticles[0].SetFloat("Spawn Rate", 1f); // set the spawn rate of drift particles 0 to 1
+            driftParticles[1].SetFloat("Spawn Rate", 1f); // set the spawn rate of drift particles 1 to 1
+            driftParticles[2].SetFloat("Spawn Rate", 1f); // set the spawn rate of drift particles 2 to 1
+            driftParticles[3].SetFloat("Spawn Rate", 1f); // set the spawn rate of drift particles 3 to 1
+            driftParticles[4].SetFloat("Spawn Rate", 1f); // set the spawn rate of drift particles 4 to 1
+            driftParticles[5].SetFloat("Spawn Rate", 1f); // set the spawn rate of drift particles 5 to 1
+            foreach (VisualEffect vfx in driftParticles) // for each drift particle visual effect
+            {
+                vfx.gameObject.SetActive(false); // deactivate the visual effect
+            }
+            burstDriftParticlesEnabled = false; // flag burst drift particles as disabled
+            driftTimer = 0; // reset the drift timer to 0
+            braking = false;
+            brakeSoundPlayed = false; // flag brake sound played as false
             respawning = true;
             controllable = false;
         }

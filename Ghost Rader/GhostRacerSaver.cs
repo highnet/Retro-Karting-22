@@ -29,16 +29,9 @@ public class GhostRacerSaver : MonoBehaviour
         numberOfNodes++;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.K))
-        {
-            SavePath(track);
-        }
-    }
-
     public void SavePath(Track track)
     {
+        Debug.Log("SAVING PATH");
         GhostRaceEntry newEntry = new GhostRaceEntry(ghostRacerPositions, ghostRacerTimestamps);
         GhostRacerRegistry ghostRiderEntries = SaveSystem.LoadGhostRider();
 

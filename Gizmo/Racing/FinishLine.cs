@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public class FinishLine : MonoBehaviour
 {
-    public enum Track { Track0, Track1 } // the types of possible tracks
+    public enum Track { Track0, Track1, Track2 } // the types of possible tracks
 
     public Track track; // the type of track in which the finish line resides on
     public RaceController raceController; // the race controller
@@ -68,8 +68,8 @@ public class FinishLine : MonoBehaviour
                     SaveSystem.SaveRecords(records); // save the newly updated records
                     racingUIController.endOfRacePanel.transform.DOMove(racingUIController.transform.position, 2.0f); // tween the end of race panel's position into the player's screen view
                     racingUIController.endOfRacePanel.GetComponent<EndOfRacePanel>().PrepareEndOfRaceScreen(); // prepare the end of race panel screen
-                    cameraManager.ActivateEndGameCam(); // activate the end game cinemachine virtual camera
                     ghostRacerSaver.SavePath(track);
+                    cameraManager.ActivateEndGameCam(); // activate the end game cinemachine virtual camera
                 }
                 else
                 {

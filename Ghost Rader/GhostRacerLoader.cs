@@ -27,7 +27,6 @@ public class GhostRacerLoader : MonoBehaviour
     {
         registry = SaveSystem.LoadGhostRider();
         pathCreators = GetComponents<PathCreator>();
-        ghostRacers = FindObjectsOfType<GhostRacer>();
         finishLine = FindObjectOfType<FinishLine>();
         track = finishLine.track;
 
@@ -66,7 +65,6 @@ public class GhostRacerLoader : MonoBehaviour
 
         float distance = 0;
         float time = 0;
-
  
         for(int i = 0; i < numberOfGhostRacers; i++)
         {
@@ -76,20 +74,21 @@ public class GhostRacerLoader : MonoBehaviour
                 {
                     distance = Vector3.Distance(positions[i][step], positions[i][step + 1]);
                     time = timeStamps[i][step + 1] - timeStamps[i][step];
-                    step++;
                 }
                 if (distance != 0 && time != 0)
                 {
                     SetSpeed(i, distance / time);
-                }
+                } 
             }
-
         }
+        step++;
+
     }
 
 
     public void SetSpeed(int ghostRacerId, float _speed)
     {
+        Debug.Log("Setting ghost racer:" + ghostRacerId + " to " + _speed + "speed");
         ghostRacers[ghostRacerId].pathFollower.speed = _speed;
     }
 
