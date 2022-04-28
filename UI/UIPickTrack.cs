@@ -22,7 +22,7 @@ public class UIPickTrack : MonoBehaviour
     private float currentColorB; // the border's current color blue
     private float currentColorA; // the border's current color alpha
     private SceneManager sceneManager; // the game's scene manager
-    private int possibleNumberOfTracks = 2; // the possible number of tracks in the game
+    public int possibleNumberOfTracks; // the possible number of tracks in the game
     public RectTransform anchor; // the positional anchor of the UI pick track element
     public UIPanelMovement panel; // the handler for moving the UI pick track element
 

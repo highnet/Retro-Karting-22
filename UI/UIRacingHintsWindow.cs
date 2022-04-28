@@ -11,8 +11,11 @@ public class UIRacingHintsWindow : MonoBehaviour
     public Image racingHintDisplay; // the image, in which sprites are to be displayed
     public float displayAlpha = 255f; // the transparency alpha of the display (starts fully visible)
     public Tween alphaTween; // the tween to handle the alpha transparency changes of the display (oscillates from 255 transparency to 0 transparency)
+    public UserSettings userSettings;
+
     private void Start()
     {
+        userSettings = FindObjectOfType<UserSettings>();
         ClearHintsWindow(); // reset the hints window back to its hidden state
     }
 
@@ -26,7 +29,8 @@ public class UIRacingHintsWindow : MonoBehaviour
 
     public void TriggerRacingHint(int hintID)
     {
-        if (PlayerPrefs.GetFloat("HintsAndTips?") == 0) // dont trigger the racing hint if the player has disabled hints and tips
+
+        if (!userSettings.hintsAndTips) // dont trigger the racing hint if the player has disabled hints and tips
         {
             return;
         }

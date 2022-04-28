@@ -13,8 +13,21 @@ public class OutOfBounds : MonoBehaviour
         respawnPoints = GetComponentsInChildren<RespawnPoint>();
     }
 
+    public void ClearActiveRespawnPoint() {
 
-    public GameObject GetFurthrestRespawnPoint()
+
+        for (int i = respawnPoints.Length - 1; i >= 0; i--)
+        {
+
+            if (respawnPoints[i].active)
+            {
+                
+                respawnPoints[i].active = false;
+            }
+        }
+    }
+
+    public GameObject GetActiveRespawnPoint()
     {
         for(int i = respawnPoints.Length-1; i >= 0; i--)
         {

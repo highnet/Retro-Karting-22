@@ -12,6 +12,7 @@ public class Achievements : MonoBehaviour
 
     private int track0pizzas;
     private int track1pizzas;
+    private int track2pizzas;
 
     void Start()
     {
@@ -34,6 +35,9 @@ public class Achievements : MonoBehaviour
             case 1:
                 SteamUserStats.SetStat("Track 1 Pizzas", numberOfPizzas);
                 break;
+            case 2:
+                SteamUserStats.SetStat("Track 2 Pizzas", numberOfPizzas);
+                break;
         }
     }
 
@@ -52,9 +56,11 @@ public class Achievements : MonoBehaviour
 
                 SteamUserStats.GetStat("Track 0 Pizzas", out track0pizzas);
                 SteamUserStats.GetStat("Track 1 Pizzas", out track1pizzas);
+                SteamUserStats.GetStat("Track 2 Pizzas", out track2pizzas);
 
                 Debug.Log("[SteamStats] " + track0pizzas + " Track 0 Pizzas");
                 Debug.Log("[SteamStats] " + track1pizzas + " Track 1 Pizzas");
+                Debug.Log("[SteamStats] " + track2pizzas + " Track 21 Pizzas");
 
 
             } else

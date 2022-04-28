@@ -29,6 +29,13 @@ public class GhostRacerSaver : MonoBehaviour
         numberOfNodes++; // increase the number of nodes counter
     }
 
+    public IEnumerator SavePathAfterSeconds(Track track, float seconds)
+    {
+        yield return new WaitForSeconds(seconds); // wait for a certain amount of seconds
+        SavePath(track);
+
+    }
+
     public void SavePath(Track track)
     {
         Debug.Log("SAVING PATH");

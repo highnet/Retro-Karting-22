@@ -68,7 +68,7 @@ public class FinishLine : MonoBehaviour
                     SaveSystem.SaveRecords(records); // save the newly updated records
                     racingUIController.endOfRacePanel.transform.DOMove(racingUIController.transform.position, 2.0f); // tween the end of race panel's position into the player's screen view
                     racingUIController.endOfRacePanel.GetComponent<EndOfRacePanel>().PrepareEndOfRaceScreen(); // prepare the end of race panel screen
-                    ghostRacerSaver.SavePath(track);
+                    StartCoroutine(ghostRacerSaver.SavePathAfterSeconds(track, .5f));
                     cameraManager.ActivateEndGameCam(); // activate the end game cinemachine virtual camera
                 }
                 else

@@ -632,7 +632,7 @@ public class KartController : MonoBehaviour
     public IEnumerator RespawnAfterSeconds(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        GameObject respawnPoint = outOfBounds.GetFurthrestRespawnPoint();
+        GameObject respawnPoint = outOfBounds.GetActiveRespawnPoint();
         GameObject collider = GameObject.Find("Collider");
         collider.transform.position = respawnPoint.transform.position;
         transform.eulerAngles = new Vector3(0, respawnPoint.transform.eulerAngles.y, 0); // set the kart rotation

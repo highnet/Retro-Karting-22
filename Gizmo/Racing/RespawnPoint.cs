@@ -12,6 +12,7 @@ public class RespawnPoint : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            GetComponentInParent<OutOfBounds>().ClearActiveRespawnPoint();
             active = true;
         }
     }
