@@ -61,7 +61,7 @@ public class RacingUIController : MonoBehaviour
         rigidBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>(); // store a local reference to the kart's rigid body
         globalVolume = GameObject.FindGameObjectWithTag("Global Volume"); // store a local reference to the game's global volume
         userSettings = GameObject.FindGameObjectWithTag("User Settings").GetComponent<UserSettings>(); // store a local reference to the user's settings
-        kartController = GameObject.FindObjectOfType<KartController>(); // store a local reference to the kart controller
+        kartController = GameObject.FindGameObjectWithTag("Controller").GetComponent<KartController>(); // store a local reference to the kart controller
         finishArchAudioClipPlayer = GameObject.FindGameObjectWithTag("Finish").GetComponent<AudioClipPlayer>(); // store a local reference to the finish arch's kart controller
         Records records = SaveSystem.LoadRecords(); // load the records from the save system
         List<RecordEntry> entries; // generate an empty entries list

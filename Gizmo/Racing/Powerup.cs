@@ -15,7 +15,7 @@ public class Powerup : MonoBehaviour
 
     private void Start()
     {
-        kartController = FindObjectOfType<KartController>(); // store a local reference to the kart controller
+        kartController = GameObject.FindGameObjectWithTag("Controller").GetComponent<KartController>(); // store a local reference to the kart controller
         racingUIController = FindObjectOfType<RacingUIController>(); // store a local reference to the racing ui controller
     }
 

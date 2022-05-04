@@ -12,7 +12,7 @@ public class PowerupTrigger : MonoBehaviour
     {
         if (other.tag == "Player") // check the collision tag for "Player"
         {
-            KartController kartController = FindObjectOfType<KartController>(); // get the kart controller
+            KartController kartController = GameObject.FindGameObjectWithTag("Controller").GetComponent<KartController>(); // get the kart controller
             Powerup powerup = kartController.powerup; // get the kart controller's powerup script
             audioClipPlayer.PlayOneShot(1, 1, 1.0f, true); // play the powerup trigger sound
             if (powerupType == PowerupType.Speedup) // speedup powerup

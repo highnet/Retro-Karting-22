@@ -14,7 +14,7 @@ public class CharacterController : MonoBehaviour
     public float randomLaughYellTimer; // the random laugh yell timer
     private void Start()
     {
-        kartController = FindObjectOfType<KartController>(); // store a local reference to the kart controller
+        kartController = GameObject.FindGameObjectWithTag("Controller").GetComponent<KartController>(); // store a local reference to the kart controller
     }
 
     private void FixedUpdate()

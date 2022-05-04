@@ -41,7 +41,7 @@ public class PizzaCollectible : MonoBehaviour
                 }
             }
             achievements.SetPizzas((int) track, numberOfPizzas);
-            kartController = FindObjectOfType<KartController>();
+            kartController = GameObject.FindGameObjectWithTag("Controller").GetComponent<KartController>();
             kartController.characterClipPlayer.PlayOneShot(0, 7, 1.0f, true);
         }
     }

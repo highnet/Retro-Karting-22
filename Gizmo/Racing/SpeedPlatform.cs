@@ -17,7 +17,7 @@ public class SpeedPlatform : MonoBehaviour
         {
             if (kartController == null) // if kartcontroller exists
             {
-                kartController = FindObjectOfType<KartController>(); // find the kart controller script
+                kartController = GameObject.FindGameObjectWithTag("Controller").GetComponent<KartController>(); // find the kart controller script
             }
 
             switch (platformType)

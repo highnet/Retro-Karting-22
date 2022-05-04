@@ -24,26 +24,26 @@ public class IntroUIController : MonoBehaviour
     {
         sceneManager = GameObject.FindGameObjectWithTag("Scene Manager").GetComponent<SceneManager>(); // store a local reference to the scene's manager
         mixerMain = GameObject.FindGameObjectWithTag("Mixer").GetComponent<Mixer>(); // store a local reference to the main mixer
-        if(SaveSystem.LoadRecords() == null || PlayerPrefs.GetInt("ResettedRecordsSince280420221221", 0) == 0) // check if there are no records on file or the records havent been force resetted since a specific timestamp with the force reset tag
+        if(SaveSystem.LoadRecords() == null || PlayerPrefs.GetInt("ResettedRecordsSince040520221443", 0) == 0) // check if there are no records on file or the records havent been force resetted since a specific timestamp with the force reset tag
         {
             SaveSystem.SaveRecords(SaveSystem.GenerateDefaultRecords()); // generate default records and save them on file
-            PlayerPrefs.SetInt("ResettedRecordsSince280420221221", 1); // set the force reset tag on player prefs
+            PlayerPrefs.SetInt("ResettedRecordsSince040520221443", 1); // set the force reset tag on player prefs
             PlayerPrefs.SetInt("ChosenCharacterIndex", 0); // set the default chosen character index
             PlayerPrefs.SetInt("ChosenKartBodyIndex", 0); // set the default chosen kart index
             PlayerPrefs.Save(); // save the player prefs
         }
 
-        if (SaveSystem.LoadCollectibles() == null || PlayerPrefs.GetInt("ResettedCollectiblesSince280420221221", 0) == 0)
+        if (SaveSystem.LoadCollectibles() == null || PlayerPrefs.GetInt("ResettedCollectiblesSince040520221443", 0) == 0)
         {
             SaveSystem.SaveCollectibles(SaveSystem.GenerateDefaultCollectibles());
-            PlayerPrefs.SetInt("ResettedCollectiblesSince280420221221", 1);
+            PlayerPrefs.SetInt("ResettedCollectiblesSince040520221443", 1);
                 PlayerPrefs.Save();
         }
 
-        if (SaveSystem.LoadGhostRider()  == null || PlayerPrefs.GetInt("ResettedGhostRiderSince280420221221", 0) == 0)
+        if (SaveSystem.LoadGhostRider()  == null || PlayerPrefs.GetInt("ResettedGhostRiderSince040520221443", 0) == 0)
         {
             SaveSystem.SaveGhostRider(SaveSystem.GenerateDefaultGhostRider());
-            PlayerPrefs.SetInt("ResettedGhostRiderSince280420221221", 1);
+            PlayerPrefs.SetInt("ResettedGhostRiderSince040520221443", 1);
             PlayerPrefs.Save();
         }
 
