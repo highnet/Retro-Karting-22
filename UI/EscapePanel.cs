@@ -66,14 +66,20 @@ public class EscapePanel : MonoBehaviour
 
     public void QuitRace()
     {
-        Unpause(); // unpause the game
-        sceneManager.ChangeScene("Main Menu", GameState.MainMenu, GameMode.NONE); // change the scene
+        if (!raceController.asyncSaveLoadRunning)
+        {
+            Unpause(); // unpause the game
+            sceneManager.ChangeScene("Main Menu", GameState.MainMenu, GameMode.NONE); // change the scene
+        }
     }
 
     public void RestartRace()
     {
-        Unpause(); // unpause the game
-        Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene(); // get the currently active scene
-        sceneManager.ChangeScene(scene.name, GameState.Racing, raceController.gameStateManager.currentGameMode); // change the scene to the current scene
+        if (!raceController.asyncSaveLoadRunning)
+        {
+            Unpause(); // unpause the game
+            Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene(); // get the currently active scene
+            sceneManager.ChangeScene(scene.name, GameState.Racing, raceController.gameStateManager.currentGameMode); // change the scene to the current scene
+        }
     }
 }

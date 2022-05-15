@@ -9,7 +9,7 @@ public class SpeedPlatform : MonoBehaviour
 
     private KartController kartController;
     public SpeedPlatformType platformType;
-    public float speedBoost;
+    public float speedChange;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -22,8 +22,8 @@ public class SpeedPlatform : MonoBehaviour
 
             switch (platformType)
             {
-                case SpeedPlatformType.VelocityMod: 
-                    kartController.SpeedBoost(speedBoost, Color.green, 1.0f, 1.0f, 1.0f, 20f, true, true, ForceMode.VelocityChange); // apply the speedboost to the kart
+                case SpeedPlatformType.VelocityMod:
+                    kartController.powerup.DoDirectedSpeedChange(speedChange, transform.up);
                     break;
                 case SpeedPlatformType.PowerUp:
                     kartController.powerup.DoSpeedUp(); // apply the mega speedup to the kart

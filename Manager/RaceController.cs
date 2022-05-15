@@ -26,6 +26,7 @@ public class RaceController : MonoBehaviour
     public UIHintsWindow hintsWindow; // the hints window
     public float boostStartTimer; // the boost start timer
     public GhostRacerLoader ghostRacerLoader;
+    public bool asyncSaveLoadRunning;   // current state of async ghost race saver operation
 
     private void Start()
     {

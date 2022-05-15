@@ -48,4 +48,9 @@ public class Powerup : MonoBehaviour
     {
         kartController.SpeedBoost(speedUpStrength,Color.green,1.0f,1.0f,1.0f,20f,true,true, ForceMode.Acceleration); // apply the speedboost to the kart
     }
+
+    public void DoDirectedSpeedChange(float velocityChange, Vector3 direction)
+    {
+        kartController.DirectedSpeedBoost(direction ,velocityChange, Color.green, 1.0f, 1.0f, 1.0f, 20f, true, true, ForceMode.VelocityChange); // apply the velocity change  to the kart
+    }
 }

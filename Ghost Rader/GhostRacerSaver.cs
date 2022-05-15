@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using static FinishLine;
 
@@ -92,6 +93,83 @@ public class GhostRacerSaver : MonoBehaviour
 
         SaveSystem.SaveGhostRider(ghostRiderEntries);
 
+        /*
+        Debug.Log("=================");
+        for (int i = 0; i < numberOfGhostRacers; i++)
+        {
+
+            if (ghostRiderEntries.entries[(int)track][i].timeStamps == null)
+            {
+                Debug.Log("null");
+            }
+            else
+            {
+                Debug.Log(ghostRiderEntries.entries[(int)track][i].timeStamps[ghostRiderEntries.entries[(int)track][i].timeStamps.Count - 1]);
+            }
+        }
+        Debug.Log("=================");
+        */
+
+
+    }
+
+    public async Task SavePathAsync(Track track)
+    {
+        Debug.Log("SAVING PATH ASYNC");
+
+        GhostRaceEntry newEntry = new GhostRaceEntry(ghostRacerPositions, ghostRacerTimestamps); // create a new entry with the saved positions and timestamps
+        GhostRacerRegistry ghostRiderEntries =  await SaveSystem.LoadGhostRiderAsync(); // load the registry
+
+        GhostRaceEntry[][] previousEntries = ghostRiderEntries.entries; // load the previous entries
+
+        int indexToPlace = 0; // the index at which the new entry will be placed
+
+        /*
+        Debug.Log("=================");
+        for (int i = 0; i < numberOfGhostRacers; i++)
+        {
+
+            if (ghostRiderEntries.entries[(int)track][i].timeStamps == null)
+            {
+                Debug.Log("null");
+            }
+            else
+            {
+                Debug.Log(ghostRiderEntries.entries[(int)track][i].timeStamps[ghostRiderEntries.entries[(int)track][i].timeStamps.Count - 1]);
+            }
+        }
+        Debug.Log("=================");
+        */
+
+
+        for (int i = 0; i < numberOfGhostRacers; i++) // for each number of ghost racers or until we write a new ghost racer entry
+        {
+            GhostRaceEntry previousEntry = previousEntries[(int)track][i]; // fetch the ghost racer entry
+
+            if (previousEntry.timeStamps == null) // check if the entry is null
+            {
+                ghostRiderEntries.entries[(int)track][i] = newEntry; // overwrite the null entry right away
+                break; // break the loop
+            }
+
+            if (previousEntry.timeStamps != null) // check if the entry is non null
+            {
+                float previousEntryElapsedTime = previousEntry.timeStamps[previousEntry.timeStamps.Count - 1]; // fetch the elapsted time
+                if (raceController.totalLapTimer < previousEntryElapsedTime) // if our time is smaller than the elapsed time
+                {
+                    indexToPlace = i; // set the index of the entry to replace to i 
+                    for (int j = numberOfGhostRacers; j > indexToPlace + 1; j--) // for all other entries to the right of the one which we will replace
+                    {
+                        ghostRiderEntries.entries[(int)track][j - 1] = ghostRiderEntries.entries[(int)track][j - 2]; // shift the entries by one
+                    }
+                    ghostRiderEntries.entries[(int)track][indexToPlace] = newEntry; // overwrite the slower entry
+                    break; // break the loop
+                }
+            }
+        }
+
+         await SaveSystem.SaveGhostRiderAsync(ghostRiderEntries);
+        Debug.Log("ASYNC SAVE FINISHED");
         /*
         Debug.Log("=================");
         for (int i = 0; i < numberOfGhostRacers; i++)

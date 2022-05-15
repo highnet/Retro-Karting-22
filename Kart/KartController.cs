@@ -148,9 +148,9 @@ public class KartController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))  // check for spacebar input
         {
             braking = true; // flag braking as true
-            if (!brakeSoundPlayed) // check if the brake sound is flagged as it hasnt played yet
+            if (!brakeSoundPlayed && rigidBody.velocity.magnitude > 10f) // check if the brake sound is flagged as it hasnt played yet
             {
-                kartClipPlayer.PlayOneShot(2, 10, 1.0f, true); // play the kart braking sound
+                kartClipPlayer.PlayOneShot(2, 10, 1.0f, false); // play the kart braking sound
                 brakeSoundPlayed = true; // flag the brake sound as played
             }
         }
@@ -411,6 +411,32 @@ public class KartController : MonoBehaviour
         sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, currentMaxForwardVelocity + force, 1.0f)); // add to the sequence a tween that changes the current max forward velocity upwards
         sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, baseMaxforwardVelocity, 1.0f)); // add to the sequence a tween that changes the current max forward velocity back to normal
     }
+
+    public void DirectedSpeedBoost(Vector3 direction, float force, Color color, float engineFireDuration, float cameraZoomOutDuration, float cameraZoomIntDuration, float deltaFoV, bool playKartSound, bool playCharacterSound, ForceMode forceMode)
+    {
+        if (!engineFire.isPlaying) // check if the engine fire is not playing
+        {
+            engineFire.Play(); // play the engine fire
+        }
+        var fire = engineFire.main; // get the engine fire settings module
+        fire.startColor = color; // set the engine fire color
+        if (playKartSound) // check if we should play the kart sound
+        {
+            kartClipPlayer.PlayOneShot(7, 12, 1.0f, true); // play the kart sound
+        }
+        if (playCharacterSound) // check if we should play the character sound
+        {
+            characterClipPlayer.PlayOneShot(0, 2, 1.0f, true); // play the character sound
+        }
+        StartCoroutine(DisableParticleSystemAfterSeconds(engineFire, engineFireDuration)); // start the couroutine which disables the engine fire after engineFireDuration seconds
+        cameraManager.DoSpeedBoostMovement(cameraZoomOutDuration, cameraZoomIntDuration, deltaFoV); // do the camera manager speed boost movement
+        rigidBody.AddForce(direction * force, forceMode); // add a directed force to the kart body
+        Sequence sequence = DOTween.Sequence(); // create a new dotween sequence
+        sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, currentMaxForwardVelocity + force, 1.0f)); // add to the sequence a tween that changes the current max forward velocity upwards
+        sequence.Append(DOTween.To(() => currentMaxForwardVelocity, (newValue) => currentMaxForwardVelocity = newValue, baseMaxforwardVelocity, 1.0f)); // add to the sequence a tween that changes the current max forward velocity back to normal
+    }
+
+
     IEnumerator DisableParticleSystemAfterSeconds(ParticleSystem ps, float seconds)
     {
         yield return new WaitForSeconds(seconds); // wait seconds seconds
@@ -491,7 +517,7 @@ public class KartController : MonoBehaviour
             {
                 StartCoroutine(CrossFadeEngineSoundTransitionCoroutine(previousEngineStage, currentEngineStage));
             }
-            kartClipPlayer.audioSources[currentEngineStage].pitch = Mathf.Lerp(kartClipPlayer.audioSources[4].pitch, Remap(Mathf.Abs(currentThrustForce), 0, Mathf.Abs(currentMaxThrustForce), 0.8f, 1.3f), 0.1f * Time.deltaTime);
+            kartClipPlayer.audioSources[currentEngineStage].pitch = Mathf.Lerp(kartClipPlayer.audioSources[4].pitch, Remap(Mathf.Abs(currentThrustForce), 0, currentMaxThrustForce, 0.8f, 1.3f), 0.1f * Time.deltaTime);
             previousEngineStage = currentEngineStage;
             yield return new WaitForSeconds(0.5f);
         }
@@ -524,6 +550,7 @@ public class KartController : MonoBehaviour
             kartClipPlayer.audioSources[9].volume = 0;
             kartClipPlayer.audioSources[10].volume = 0;
             kartClipPlayer.audioSources[11].volume = 1;
+            /*
             if (previousStage == 3)                           // PLAY UP SHIFT TRANSITION
             {
                 kartClipPlayer.PlayOneShot(11, 16, 1f, true);
@@ -540,7 +567,7 @@ public class KartController : MonoBehaviour
             {
                 kartClipPlayer.PlayOneShot(11, 19, 1f, true);
             }
-            yield return new WaitForSeconds(0.5f);
+            */
             for (float i = 0; i <= 1; i += 0.1f)                                        // FADE IN NEW ENGINE SOUNDS
             {
                 kartClipPlayer.audioSources[currentStage].volume = i;
@@ -636,8 +663,13 @@ public class KartController : MonoBehaviour
         GameObject collider = GameObject.Find("Collider");
         collider.transform.position = respawnPoint.transform.position;
         transform.eulerAngles = new Vector3(0, respawnPoint.transform.eulerAngles.y, 0); // set the kart rotation
+        rigidBody.velocity = Vector3.zero;               // reset rigid body velocity
         respawning = false;
-        controllable = true;
+        if (raceController.racePhase != RaceController.RacePhase.TimeTrialGameEnd)  // check if race is  over before giving player control
+        {
+            controllable = true;
+        }
+
     }
     public void Respawn()
     {

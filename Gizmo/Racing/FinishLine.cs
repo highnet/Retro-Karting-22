@@ -4,6 +4,7 @@ using UnityEngine;
 using static GarageManager;
 using static RaceController;
 using DG.Tweening;
+using System.Threading.Tasks;
 
 public class FinishLine : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class FinishLine : MonoBehaviour
         outOfBounds = FindObjectOfType<OutOfBounds>();
         ghostRacerSaver = FindObjectOfType<GhostRacerSaver>();
     }
-    private void OnTriggerEnter(Collider other)
+    private async void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player") // check the collision object for the "Player" tag
         {
@@ -55,21 +56,24 @@ public class FinishLine : MonoBehaviour
 
                 if (raceController.lapNumber == raceController.totalNumberOfLaps) // if the current lap number is equal to the total number of laps (race is over condition)
                 {
+                    raceController.asyncSaveLoadRunning = true;
                     audioClipPlayer.PlayOneShot(0, 1, 1.0f, true); // play the finish line's race is over fanfare sound
                     kartController.controllable = false; // make the kart controller uncontrollable
                     raceController.racePhase = RacePhase.TimeTrialGameEnd; // set the race phase to time trial game end
                     recordEntry = new RecordEntry(raceController.totalLapTimer, "You" , (Character) PlayerPrefs.GetInt("ChosenCharacterIndex"), (KartBody) PlayerPrefs.GetInt("ChosenKartBodyIndex")); // generate the new record entry
-                    Records records = SaveSystem.LoadRecords(); // load the player's records from the save system
+                    Records records = await SaveSystem.LoadRecordsAsync(); // load the player's records from the save system
                     records.registry.TryGetValue(track.ToString(), out recordEntries); // get the track's record entries from the player's records
                     recordEntries.Add(recordEntry); // add the new record entry to the record entries
                     recordEntries = SaveSystem.SortRecordEntries(recordEntries); // sort the record entries, so that the new entry goes into the right position
                     racingUIController.UpdateRecordTimerTexts(recordEntries); // update the racing ui's record timer texts to reflect the track's new records
                     records.registry[track.ToString()] = recordEntries; //  put the new record entries back into the record's registry
-                    SaveSystem.SaveRecords(records); // save the newly updated records
+                   await SaveSystem.SaveRecordsAsync(records); // save the newly updated records
                     racingUIController.endOfRacePanel.transform.DOMove(racingUIController.transform.position, 2.0f); // tween the end of race panel's position into the player's screen view
                     racingUIController.endOfRacePanel.GetComponent<EndOfRacePanel>().PrepareEndOfRaceScreen(); // prepare the end of race panel screen
-                    StartCoroutine(ghostRacerSaver.SavePathAfterSeconds(track, .5f));
                     cameraManager.ActivateEndGameCam(); // activate the end game cinemachine virtual camera
+                   await ghostRacerSaver.SavePathAsync(track);
+                    raceController.asyncSaveLoadRunning = false;
+
                 }
                 else
                 {

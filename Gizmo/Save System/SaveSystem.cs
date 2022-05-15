@@ -6,62 +6,176 @@ using System.Linq;
 using static FinishLine;
 using static GarageManager;
 using System;
+using System.Threading.Tasks;
 
 public static class SaveSystem
 {
 
     public static void SaveGhostRider(GhostRacerRegistry ghostRiderEntries)
     {
-        BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to write to file
+
+        GhostRacerRegistrySerializable wrapper = new GhostRacerRegistrySerializable(ghostRiderEntries);
+
         string path = Application.persistentDataPath + "/ghostrider.sav"; // generate the path to save the records
-        FileStream stream = new FileStream(path, FileMode.Create); // create a new file stream in create mode order to write to file
-        formatter.Serialize(stream, ghostRiderEntries); // serialize the records into the filepath using the file stream
-        stream.Close(); // close the stream
+
+        string json = JsonUtility.ToJson(wrapper);
+        File.WriteAllText(path, json);
+    }
+
+
+    public async static Task SaveGhostRiderAsync(GhostRacerRegistry ghostRiderEntries)
+    {
+        string path = Application.persistentDataPath + "/ghostrider.sav"; // generate the path to save the records
+        string json = "";
+
+        json = await Task.Run(() =>
+        {
+            GhostRacerRegistrySerializable wrapper = new GhostRacerRegistrySerializable(ghostRiderEntries);
+            json = JsonUtility.ToJson(wrapper);
+            return json;
+        });
+
+        await File.WriteAllTextAsync(path, json);
     }
 
     public static GhostRacerRegistry LoadGhostRider()
     {
-        string path = Application.persistentDataPath + "/ghostrider.sav"; // generate teh path to load ther ecords
+        string path = Application.persistentDataPath + "/ghostrider.sav"; // generate teh path to load ther records
         if (File.Exists(path)) // if the file path exists
         {
-            BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to read from file
-            FileStream stream = new FileStream(path, FileMode.Open); // create a new file stream in open mode in order to open from file
-            GhostRacerRegistry entries = (GhostRacerRegistry)formatter.Deserialize(stream); // deserialize the records
-            stream.Close(); // close the stream
-            return entries; // return the records
+           
+
+            string json = File.ReadAllText(path);
+            GhostRacerRegistrySerializable wrapper =  JsonUtility.FromJson<GhostRacerRegistrySerializable>(json);
+
+           return wrapper.Unwrap(); 
+            
+
         }
         else
         {
             return null; // else return null
         }
     }
+
+    public async static Task<GhostRacerRegistry> LoadGhostRiderAsync()
+    {
+        string path = Application.persistentDataPath + "/ghostrider.sav"; // generate teh path to load ther records
+        if (File.Exists(path)) // if the file path exists
+        {
+            GhostRacerRegistry registry = null;
+
+
+
+            string json = await File.ReadAllTextAsync(path);
+            registry  = await Task.Run(() =>
+            {
+                GhostRacerRegistrySerializable wrapper = JsonUtility.FromJson<GhostRacerRegistrySerializable>(json);
+                registry = wrapper.Unwrap();
+                return registry;
+            });
+
+
+              
+          if(registry != null) 
+            {
+                return registry;
+            } else
+            {
+                return await Task.FromResult<GhostRacerRegistry>(null); // else return null
+            }
+           
+        }
+        else
+        {
+            return await Task.FromResult<GhostRacerRegistry>(null); // else return null
+        }
+    }
+
     public static void SaveRecords(Records records)
     {
-        BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to write to file
+
+        RecordsSerializable wrapper = new RecordsSerializable(records);
+
         string path = Application.persistentDataPath + "/records.sav"; // generate the path to save the records
-        FileStream stream = new FileStream(path, FileMode.Create); // create a new file stream in create mode order to write to file
-        formatter.Serialize(stream, records); // serialize the records into the filepath using the file stream
-        stream.Close(); // close the stream
+
+        string json = JsonUtility.ToJson(wrapper);
+
+        File.WriteAllText(path, json);
+
     }
+
+    public async static Task SaveRecordsAsync(Records records)
+    {
+
+       
+
+        string path = Application.persistentDataPath + "/records.sav"; // generate the path to save the records
+        string json = "";
+
+        json =  await Task.Run(()=> {
+            RecordsSerializable wrapper = new RecordsSerializable(records);
+            json = JsonUtility.ToJson(wrapper);
+            return json;
+        });
+
+
+        await File.WriteAllTextAsync(path, json);
+
+    }
+
+
 
     public static Records LoadRecords()
     {
         string path = Application.persistentDataPath + "/records.sav"; // generate teh path to load ther ecords
         if (File.Exists(path)) // if the file path exists
         {
-            BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to read from file
-            FileStream stream = new FileStream(path, FileMode.Open); // create a new file stream in open mode in order to open from file
-            Records records = (Records) formatter.Deserialize(stream); // deserialize the records
-            stream.Close(); // close the stream
-            return records; // return the records
+            string json = File.ReadAllText(path);
+            RecordsSerializable wrapper = JsonUtility.FromJson<RecordsSerializable>(json);
+
+            return wrapper.Unwrap();
         } else
         {
             return null; // else return null
         }
     }
 
+    public async static Task<Records> LoadRecordsAsync()
+    {
+        string path = Application.persistentDataPath + "/records.sav"; // generate teh path to load ther ecords
+        if (File.Exists(path)) // if the file path exists
+        {
+            Records records = null;
+
+            string json = await File.ReadAllTextAsync(path);
+            records = await Task.Run(()=> 
+            { 
+                RecordsSerializable wrapper = JsonUtility.FromJson<RecordsSerializable>(json);
+                records = wrapper.Unwrap();
+                return records;
+            });
+
+   
+            RecordsSerializable wrapper = JsonUtility.FromJson<RecordsSerializable>(json);
+
+            if (records != null) {
+                return records;
+            } else
+            {
+                return await Task.FromResult<Records>(null); // else return null
+            }
+            
+        }
+        else
+        {
+            return await Task.FromResult<Records>(null); // else return null
+        }
+    }
+
     public static GhostRacerRegistry GenerateDefaultGhostRider()
     {
+
         GhostRaceEntry defaultGhostRaceEntry = new GhostRaceEntry(null,null);
         GhostRaceEntry[][] defaultGhostRaceEntries = new GhostRaceEntry[][]  
         { 
@@ -69,29 +183,33 @@ public static class SaveSystem
             new GhostRaceEntry[] { defaultGhostRaceEntry, defaultGhostRaceEntry, defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry, defaultGhostRaceEntry  },
             new GhostRaceEntry[] { defaultGhostRaceEntry, defaultGhostRaceEntry, defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry , defaultGhostRaceEntry, defaultGhostRaceEntry  }
         };
+
         return new GhostRacerRegistry(defaultGhostRaceEntries);
     }
 
 
     public static void SaveCollectibles(Collectibles collectibles)
     {
-        BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to write to file
+
+        CollectiblesSerializable wrapper = new CollectiblesSerializable(collectibles);
+
         string path = Application.persistentDataPath + "/collectibles.sav"; // generate the path to save the records
-        FileStream stream = new FileStream(path, FileMode.Create); // create a new file stream in create mode order to write to file
-        formatter.Serialize(stream, collectibles); // serialize the records into the filepath using the file stream
-        stream.Close(); // close the stream
+
+        string json = JsonUtility.ToJson(wrapper);
+
+        File.WriteAllText(path, json);
     }
+
+
 
     public static Collectibles LoadCollectibles()
     {
         string path = Application.persistentDataPath + "/collectibles.sav"; // generate teh path to load ther ecords
         if (File.Exists(path)) // if the file path exists
         {
-            BinaryFormatter formatter = new BinaryFormatter(); // create a new binary formatter in order to read from file
-            FileStream stream = new FileStream(path, FileMode.Open); // create a new file stream in open mode in order to open from file
-            Collectibles collectibles = (Collectibles)formatter.Deserialize(stream); // deserialize the records
-            stream.Close(); // close the stream
-            return collectibles; // return the records
+            string json = File.ReadAllText(path);
+            CollectiblesSerializable wrapper = JsonUtility.FromJson<CollectiblesSerializable>(json);
+            return wrapper.Unwrap(); // return the records
         }
         else
         {
